@@ -1,0 +1,201 @@
+---@class RedBlackTree
+---@field x integer
+---@field y integer
+---@field z integer
+---@field value any
+---@field isRed boolean
+---@field left RedBlackTree | nil
+---@field right RedBlackTree | nil
+---@field parent RedBlackTree | nil
+
+-- Note: I'm not using a class because RedBlackTree is a low-level data structure. Methods will be defined in MetaChunk instead.
+-- Note: there is no need for deleting. Chunks that are empty can be reused
+
+---@return RedBlackTree
+local function createNode(x, y, z, value, left, right, parent)
+    return {
+        x = x,
+        y = y,
+        z = z,
+        value = value,
+        left = left,
+        right = right,
+        parent = parent
+    }
+end
+
+--- Compares 3 integers
+function compare(node, x, y, z)
+    if node.x > x then
+        return 1
+    elseif node.x < x then
+        return -1
+    elseif node.y > y then
+        return 1
+    elseif node.y < y then
+        return -1
+    elseif node.z > z then
+        return 1
+    elseif node.z < z then
+        return -1
+    else
+        return 0
+    end
+end
+
+---Performs a binary search for the given item.
+---@param node RedBlackTree
+---@param x integer
+---@param y integer
+---@param z integer
+---@return any | nil
+local function search(node, x, y, z)
+    if node == nil then
+        return
+    end
+
+    local comparison = compare(node, x, y, z)
+    if comparison == 1 then
+        return search(node.left, x, y, z)
+    elseif comparison == -1 then
+        return search(node.right, x, y, z)
+    else
+        return node.value
+    end
+end
+
+---Left rotates a node in a RedBlackTree
+---@param tree { root: RedBlackTree }
+---@param node RedBlackTree
+local function rotateLeft(tree, node)
+    local right = node.right
+    node.right = right.left
+
+    if right.left ~= nil then
+        right.left.parent = node
+    end
+
+    right.parent = node.parent
+
+    if node.parent == nil then
+        tree.root = right
+    elseif node == node.parent.left then
+        node.parent.left = right
+    else
+        node.parent.right = right
+    end
+
+    right.left = node
+    node.parent = right
+end
+
+---Right rotates a node in a RedBlackTree
+---@param tree { root: RedBlackTree }
+---@param node RedBlackTree
+local function rotateRight(tree, node)
+    local left = node.left
+    node.left = left.right
+
+    if left.right ~= nil then
+        left.right.parent = node
+    end
+
+    left.parent = node.parent
+
+    if node.parent == nil then
+        tree.root = left
+    elseif node == node.parent.right then
+        node.parent.right = left
+    else
+        node.parent.left = left
+    end
+
+    left.right = node
+    node.parent = left
+end
+
+---Performs tree rebalancing whenever a node is inserted, ensuring the tree does not degenerate into a linked list
+---@param tree { root: RedBlackTree }
+---@param node RedBlackTree
+local function fixInsert(tree, node)
+    while node ~= tree.root and node.parent.isRed do
+        if node.parent == node.parent.parent.left then
+            local uncle = node.parent.parent.right
+            if uncle.isRed then
+                node.parent.color.isRed = false
+                uncle.isRed = false
+                node.parent.parent.isRed = true
+                node = node.parent.parent
+            else
+                if node == node.parent.right then
+                    node = node.parent
+                    rotateLeft(tree, node)
+                end
+                node.parent.isRed = false
+                node.parent.parent.isRed = true
+                rotateRight(tree, node.parent.parent)
+            end
+        else
+            local uncle = node.parent.parent.left
+            if uncle.isRed then
+                node.parent.isRed = false
+                uncle.isRed = false
+                node.parent.parent.isRed = true
+                node = node.parent.parent
+            else
+                if node == node.parent.left then
+                    node = node.parent
+                    rotateRight(tree, node)
+                end
+                node.parent.isRed = false
+                node.parent.parent.isRed = true
+                rotateLeft(tree, node.parent.parent)
+            end
+        end
+    end
+    tree.root.isRed = false
+end
+
+local function insert(tree, x, y, z, value)
+    local node = createNode(x, y, z, value)
+
+    local parent = nil
+    local current = tree.root
+
+    -- Find parent
+    while current ~= nil do
+        parent = current
+        local comparison = compare(tree, x, y, z)
+        if comparison == 1 then
+            current = current.right
+        else
+            current = current.left
+        end
+    end
+    node.parent = parent
+
+    -- Actually insert the node
+    if parent == nil then
+        tree.root = node
+    elseif compare(node, parent.x, parent.y, parent.z) == -1 then
+        parent.left = node
+    else
+        parent.right = node
+    end
+
+    if node.parent == nil then
+        node.isRed = false
+        return
+    end
+
+    if node.parent.parent == nil then
+        return
+    end
+
+    fixInsert(tree, node)
+end
+
+return {
+    search = search,
+    insert = insert,
+}

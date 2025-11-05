@@ -56,7 +56,7 @@ local modem = peripheral.find("modem")
 if not modem then
     error("Modem not found. Please ensure that a modem is attached before running this program.")
 end
-rednet.open(modem)
+rednet.open(peripheral.getName(modem))
 
 -- Connect to the server
 local server = rednet.lookup("t8s", serverName)
@@ -89,11 +89,12 @@ end
 
 -- Loop and receive commands from the server
 while true do
-    message = receive()
+    local _, _, message = os.pullEvent("rednet_message")
+    print(unpack(message))
     local method = turtle[message[1]]
     if method then
         -- Note: pcall in lua acts like try-catch, returning false as its first return value if the function errors
-        local results = {pcall(method, unpack(messsage, 2))}
+        local results = {pcall(method, unpack(message, 2))}
         send(results)
     else
         send({false, "Method " .. message[1] .. "not found."})
