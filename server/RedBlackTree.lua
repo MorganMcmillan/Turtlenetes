@@ -196,6 +196,7 @@ local function insert(tree, x, y, z, value)
 end
 
 return {
+    createNode = createNode,
     search = search,
     insert = insert,
 }

@@ -15,3 +15,5 @@ function Project:init(volume, name)
     self.chunks = MetaChunk:new()
     self.messages = {}
 end
+
+return Project

@@ -1,6 +1,6 @@
 local Volume = require("Volume")
 
----@class Chunk: Object3d
+---@class Chunk: Object3d, Serializable
 ---@field blocks Block[]
 ---@field neighbors Chunk[]
 local Chunk = require("Object3d"):extend("Chunk")
@@ -21,7 +21,7 @@ end
 ---@param z integer
 ---@return Block
 function Chunk:getBlockRelative(x, y, z)
-    return self:getBlockAbsolute(x - self.x, y - self.y, z - self.z)
+    return self:getBlockAbsolute(x - self.x + 1, y - self.y + 1, z - self.z + 1)
 end
 
 ---Get a block by absolute (local) coordinates
