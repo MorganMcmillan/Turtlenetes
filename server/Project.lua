@@ -1,6 +1,6 @@
 local MetaChunk = require("MetaChunk")
 
----@class Project: Volume
+---@class Project: Volume, Serializable
 ---@field name string
 ---@field turtles table<integer, Turtle>
 ---@field chunks MetaChunk

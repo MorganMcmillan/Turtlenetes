@@ -18,7 +18,11 @@ function MetaChunk:getChunk(x, y, z)
 end
 
 ---Gets a block using relative (global) coordinates
----@return Block
+---@return Block | false
 function MetaChunk:getBlock(x, y, z)
     return self:getChunk(x, y, z):getBlockRelative(x, y, z)
+end
+
+function MetaChunk:setBlock(x, y, z, block)
+    return self:getChunk(x, y, z):setBlockRelative(x, y, z, block)
 end

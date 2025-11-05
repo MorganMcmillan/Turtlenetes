@@ -1,6 +1,6 @@
 local Object3D = require("Object3D")
 
----@class Volume: Object3d
+---@class Volume: Object3d, Serializable
 ---@field length integer x-axis length
 ---@field height integer y-axis height
 ---@field width integer z-axis width

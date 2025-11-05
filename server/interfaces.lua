@@ -9,3 +9,7 @@
 ---@class Serializable
 ---@field serialize fun(self: self, buffer: StringBuffer)
 ---@field deserialize fun(self: self, contents: string): self
+
+---@class ItemFilter
+---@field providesItem fun(self: self, item: Item): boolean
+---@field takeItem fun(self: self, item: Item)

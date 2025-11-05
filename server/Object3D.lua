@@ -26,24 +26,31 @@ end
 ---Create a new Object3d moved in the direction
 ---@param direction string
 ---@return Object3d
-function Object3D:moveInDirection(direction)
+function Object3D:movedInDirection(direction)
     local x, z = self.x, self.z
     if direction == "North" then
-        -- was is x or z
+        z = z - 1
     elseif direction == "East" then
+        x = x + 1
     elseif direction == "South" then
+        z = z + 1
     elseif direction == "West" then
+        x = x - 1
     else
         error("Invalid direction " .. direction .. ".")
     end
     return Object3D:new(x, self.y, z)
 end
 
-function Object3D:moveUp()
+---Create a new Object3d moved upwards
+---@return Object3d
+function Object3D:movedUp()
     return Object3D:new(self.x, self.y + 1, self.z)
 end
 
-function Object3D:moveDown()
+---Create a new Object3d moved downwards
+---@return Object3d
+function Object3D:movedDown()
     return Object3D:new(self.x, self.y - 1, self.z)
 end
 
