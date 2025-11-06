@@ -1,20 +1,27 @@
 local RedBlackTree = require("RedBlackTree")
 local search = RedBlackTree.search
+local insert = RedBlackTree.insert
 local Chunk = require("Chunk")
 
 ---@class MetaChunk: class, Serializable
----@field chunks RedBlackTree
+---@field root RedBlackTree
 local MetaChunk = require("class"):extend("MetaChunk")
 
 function MetaChunk:init()
     local chunk = Chunk:new(0, 0, 0)
-    self.chunks = RedBlackTree.createNode(0, 0, 0, chunk)
+    self.root = RedBlackTree.createNode(0, 0, 0, chunk)
 end
 
 ---Gets a chunk using relative (global) coordinates
 ---@return Chunk
 function MetaChunk:getChunk(x, y, z)
-    return search(self.chunks, x / 16, y / 16, z / 16)
+    return search(self.root, x / 16, y / 16, z / 16)
+end
+
+function MetaChunk:addChunk(x, y, z)
+    local chunk = Chunk:new(x, y, z)
+    insert(self, x, y, z, chunk)
+    -- TODO: Add chunk neighbors
 end
 
 ---Gets a block using relative (global) coordinates

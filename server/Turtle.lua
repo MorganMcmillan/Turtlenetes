@@ -27,7 +27,7 @@ end
 
 local function defineCommandUpDown(command)
     for _, suffix in ipairs({"", "Up", "Down"}) do
-        defineCommand(comamnd .. suffix)
+        defineCommand(command .. suffix)
     end
 end
 

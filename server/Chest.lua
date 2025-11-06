@@ -8,12 +8,29 @@ function Chest:updateInventory()
 -- TODO
 end
 
+---Checks if the item is in the inventory and returns its index
+---@param item Item
+---@return integer | nil
 function Chest:contains(item)
-    
+    -- TODO: add a map cache for items, perhaps create an inventory class
+    local inventory = self.inventory
+    for i = 1, #inventory do
+        local inventoryItem = inventory[i]
+        if inventoryItem and inventoryItem:matches(item) then
+            return i
+        end
+    end
 end
 
 function Chest:providesItem(item)
-    return filter:matches(item) and self:contains(item)
+    local matches
+    if self.filter then
+        matches = self.filter:matches(item)
+    else
+        matches = true
+    end
+
+    return matches and self:contains(item)
 end
 
 function Chest:takeItem(item, count)

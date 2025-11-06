@@ -10,6 +10,8 @@
 ---@field serialize fun(self: self, buffer: StringBuffer)
 ---@field deserialize fun(self: self, contents: string): self
 
----@class ItemFilter
+---@class ItemProvider
 ---@field providesItem fun(self: self, item: Item): boolean
 ---@field takeItem fun(self: self, item: Item)
+
+---@alias PhysicalInventory table<integer, { name: string, count: integer }>

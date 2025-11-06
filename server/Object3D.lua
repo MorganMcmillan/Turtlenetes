@@ -1,14 +1,18 @@
----@class Object3d: class, Drawable3D
+---@class Object3D: class, Drawable3D
 ---@field x integer
 ---@field y integer
 ---@field z integer
 ---@field color? integer
-local Object3D = require("class"):extend("Object3d")
+local Object3D = require("class"):extend("Object3D")
 
 function Object3D:init(x, y, z)
     self.x = x
     self.y = y
     self.z = z
+end
+
+function Object3D:xyz()
+    return self.x, self.y, self.z
 end
 
 function Object3D:setPosition(other)
@@ -17,15 +21,15 @@ function Object3D:setPosition(other)
     self.z = other.z
 end
 
----comment
+---Draws this object as a cube
 ---@param buffer Buffer3D
 function Object3D:draw(buffer)
-    buffer:drawCube(self.x, self.y, self.z, self.x, self.y, self.z, self.color or colors.lightBlue)
+    buffer:drawCube(self.x, self.y, self.z, self.x + 1, self.y + 1, self.z + 1, self.color or colors.lightBlue)
 end
 
----Create a new Object3d moved in the direction
+---Create a new Object3D moved in the direction
 ---@param direction string
----@return Object3d
+---@return Object3D
 function Object3D:movedInDirection(direction)
     local x, z = self.x, self.z
     if direction == "North" then
@@ -42,14 +46,14 @@ function Object3D:movedInDirection(direction)
     return Object3D:new(x, self.y, z)
 end
 
----Create a new Object3d moved upwards
----@return Object3d
+---Create a new Object3D moved upwards
+---@return Object3D
 function Object3D:movedUp()
     return Object3D:new(self.x, self.y + 1, self.z)
 end
 
----Create a new Object3d moved downwards
----@return Object3d
+---Create a new Object3D moved downwards
+---@return Object3D
 function Object3D:movedDown()
     return Object3D:new(self.x, self.y - 1, self.z)
 end

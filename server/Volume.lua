@@ -1,6 +1,6 @@
 local Object3D = require("Object3D")
 
----@class Volume: Object3d, Serializable
+---@class Volume: Object3D, Serializable
 ---@field length integer x-axis length
 ---@field height integer y-axis height
 ---@field width integer z-axis width
@@ -31,7 +31,7 @@ function Volume.fromObject3D(object, length, height, width)
 end
 
 ---Tests if an object is contained within this volume
----@param object Object3d | Volume
+---@param object Object3D | Volume
 ---@return boolean
 function Volume:contains(object)
     return

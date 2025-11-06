@@ -4,9 +4,9 @@
 ---@field z integer
 ---@field value any
 ---@field isRed boolean
----@field left RedBlackTree | nil
----@field right RedBlackTree | nil
----@field parent RedBlackTree | nil
+---@field left RedBlackTree
+---@field right RedBlackTree
+---@field parent RedBlackTree
 
 -- Note: I'm not using a class because RedBlackTree is a low-level data structure. Methods will be defined in MetaChunk instead.
 -- Note: there is no need for deleting. Chunks that are empty can be reused
@@ -18,6 +18,7 @@ local function createNode(x, y, z, value, left, right, parent)
         y = y,
         z = z,
         value = value,
+        isRed = false,
         left = left,
         right = right,
         parent = parent
@@ -122,7 +123,7 @@ local function fixInsert(tree, node)
         if node.parent == node.parent.parent.left then
             local uncle = node.parent.parent.right
             if uncle.isRed then
-                node.parent.color.isRed = false
+                node.parent.isRed = false
                 uncle.isRed = false
                 node.parent.parent.isRed = true
                 node = node.parent.parent
@@ -159,6 +160,7 @@ end
 local function insert(tree, x, y, z, value)
     local node = createNode(x, y, z, value)
 
+    ---@type RedBlackTree
     local parent = nil
     local current = tree.root
 
