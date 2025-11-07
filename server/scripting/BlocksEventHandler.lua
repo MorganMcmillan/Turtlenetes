@@ -1,5 +1,3 @@
-local BlocksScript = require("BlocksScript")
-
 ---@class BlocksScriptState
 ---@field script BlocksScript
 ---@field instruction integer
@@ -7,10 +5,13 @@ local BlocksScript = require("BlocksScript")
 ---@class BlocksEventHandler: class
 ---@field handlers table<Event, BlocksScript>
 ---@field callStack BlocksScriptState[]
+---@field variables table
 local BlocksEventHandler = require("class"):extend("BlocksEventHandler")
 
-function BlocksEventHandler:init()
-    self.handers = {}
+function BlocksEventHandler:init(variables)
+    self.handlers = {}
+    self.callStack = {}
+    self.variables = variables or {}
 end
 
 function BlocksEventHandler:addEvent(event, script)

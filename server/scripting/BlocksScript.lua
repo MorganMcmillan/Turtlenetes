@@ -6,6 +6,14 @@ function BlocksScript:init(instructions)
     self.instructions = instructions or {}
 end
 
-function BlocksScript:tick(handler, instruction)
-    return self.instructions[instruction]:run(handler)
+---Runs a single block instruction
+---@param handler BlocksEventHandler
+---@param pc integer
+---@return any
+function BlocksScript:tick(handler, pc)
+    local instruction = self.instructions[pc]
+    if instruction then
+        return instruction:run(handler)
+    end
+    handler:pop()
 end
