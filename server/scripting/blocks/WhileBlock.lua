@@ -1,19 +1,21 @@
----@class ForBlock: class, BlocksInstruction
+---@class WhileBlock: class, BlocksInstruction
 ---@field condition BlocksExpression
----@field body BlocksScript
-local ForBlock = require("class"):extend("IfBlock")
+local WhileBlock = require("class"):extend("WhileBlock")
+WhileBlock.name = "While"
+WhileBlock.inputs = 1
 
-function ForBlock:init(condition, body)
+function WhileBlock:init(body, condition)
     self.condition = condition
     self.body = body
 end
 
-function ForBlock:run(handler)
-    local result = self.condition:evaluate(handler)
-    local branch = self[result]
-    if branch then
-        handler:push(branch)
+---@param handler BlocksEventHandler
+function WhileBlock:run(handler)
+    local condition = self.condition:evaluate(handler)
+    if condition then
+        handler:jumpBack()
+        handler:push(self.body)
     end
 end
 
-return ForBlock
+return WhileBlock

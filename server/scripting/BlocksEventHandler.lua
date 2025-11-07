@@ -39,6 +39,17 @@ function BlocksEventHandler:pop()
     self.callStack[#self.callStack] = nil
 end
 
+---Jumps back by one instruction. Used to enable loops.
+function BlocksEventHandler:jumpBack()
+    local state = self.callStack[#self.callStack]
+    state.instruction = state.instruction - 1
+end
+
+---Initializes a block to be ran later
+function BlocksEventHandler:initBlock()
+    
+end
+
 ---Triggers the script associated with this event
 ---@param event Event
 function BlocksEventHandler:trigger(event)
