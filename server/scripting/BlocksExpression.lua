@@ -44,8 +44,8 @@ end
 
 function BlocksExpression:draw(x, y)
     local color = self.color
-    paintutils.drawPixel(x, y, color)
-    x = x + 1
+    -- Draw enclosing "[ ]" to signify where the expression is
+    x = rectangle.drawText(x, y, "[", color)
 
     if self.inputCount == 2 then
         x = self.inputs[1]:draw(x, y)
@@ -70,9 +70,7 @@ function BlocksExpression:draw(x, y)
         end
     end
 
-    paintutils.drawPixel(x, y, color)
-    return x + 1
-    -- Draw enclosing "[ ]" to signify where the expression is
+    return rectangle.drawText(x, y, "]", color)
 end
 
 -- Operations like addition, subtractions, concatenation, and comparisons are implemented as subclasses of BlocksExpression
