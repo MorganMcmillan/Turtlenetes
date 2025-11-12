@@ -1,4 +1,4 @@
----@class OrientedBlock: Block
+---@class OrientedBlock: BlocksInstruction
 ---@field orientation string
 local OrientedBlock = require("Block"):extend("OrientedBlock")
 

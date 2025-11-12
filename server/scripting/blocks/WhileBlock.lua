@@ -1,8 +1,9 @@
 ---@class WhileBlock: class, BlocksInstruction
 ---@field condition BlocksExpression
 local WhileBlock = require("class"):extend("WhileBlock")
-WhileBlock.name = "While"
+WhileBlock.displayName = "While"
 WhileBlock.inputs = 1
+WhileBlock.branches = 1
 
 function WhileBlock:init(body, condition)
     self.condition = condition

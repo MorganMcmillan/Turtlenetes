@@ -1,5 +1,0 @@
----@class BlocksInstruction
----@field name string
----@field body BlocksScript
----@field inputs integer
----@field run fun(self: self, handler: BlocksEventHandler)

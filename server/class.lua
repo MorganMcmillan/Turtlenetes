@@ -3,6 +3,7 @@
 ---@class class
 ---@field name string
 ---@field super class
+---@field __extend fun(self, subclass: class) called whenever the class is extended
 ---@field init fun(self, ...)
 local class = {name = "class"}
 class.__index = class
@@ -17,6 +18,10 @@ function class:extend(name)
     local heir = setmetatable({name = name, super = self}, self)
     heir.__index = heir
     heir.__tostring = self.__tostring
+    local onExtend = self.__extend
+    if onExtend then
+        onExtend(self, heir)
+    end
     return heir
 end
 

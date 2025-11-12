@@ -1,16 +1,32 @@
+-- TODO: this block will be finished later
+
 ---@class ForBlock: class, BlocksInstruction
 ---@field body BlocksScript
 ---@field first number
 ---@field last number
 ---@field step number
 ---@field current number
-local ForBlock = require("class"):extend("ForBlock")
-ForBlock.name = "For"
-ForBlock.inputs = 3
+local ForBlock = require("Block"):extend("ForBlock")
+ForBlock.displayName = "For"
+ForBlock.inputCount = 3
+ForBlock.branchCount = 1
 
-function ForBlock:init(body, first, last, step)
+function ForBlock:init(handler)
+    self.super.init(self, handler)
+    self:initLoop(handler)
+end
+
+function ForBlock:initLoop(handler)
+    local
+        first,
+        last,
+        step
+        =
+        handler:getVariable(self.inputs[1]),
+        handler:getVariable(self.inputs[2]),
+        handler:getVariable(self.inputs[3])
+
     if step == 0 then error("Step value cannot be zero") end
-    self.body = body
     if not last then
         last = first
         first = 1
@@ -29,7 +45,7 @@ function ForBlock:run(handler)
         handler:jumpBack()
         handler:push(self.body)
     else
-        handler:initBlock(self)
+        self:initLoop(handler)
     end
 end
 

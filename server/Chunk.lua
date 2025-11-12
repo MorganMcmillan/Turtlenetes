@@ -3,7 +3,7 @@ local Volume = require("Volume")
 ---Chunks are the primary container for blocks.
 ---Blocks are indexed using zero-based coordinates, unlike Lua's one-based indexes.
 ---@class Chunk: Object3D, Serializable
----@field blocks (Block | false)[]
+---@field blocks (BlocksInstruction | false)[]
 ---@field neighbors Chunk[] chunks neighboring on each side, in the order of North, East, South, West, Up, Down
 local Chunk = require("Object3D"):extend("Chunk")
 
@@ -63,7 +63,7 @@ end
 ---@param x integer
 ---@param y integer
 ---@param z integer
----@return Block | false
+---@return BlocksInstruction | false
 function Chunk:getBlockRelative(x, y, z)
     return self:getBlockAbsolute(x - self.x, y - self.y, z - self.z)
 end
@@ -72,7 +72,7 @@ end
 ---@param x integer
 ---@param y integer
 ---@param z integer
----@return Block | false
+---@return BlocksInstruction | false
 function Chunk:getBlockAbsolute(x, y, z)
     local i, chunk = self:prepareCoordinates(x, y, z)
     return chunk.blocks[i]
@@ -82,7 +82,7 @@ end
 ---@param x integer
 ---@param y integer
 ---@param z integer
----@param block Block
+---@param block BlocksInstruction
 ---@return boolean
 function Chunk:setBlockRelative(x, y, z, block)
     return self:setBlockAbsolute(x - self.x, y - self.y, z - self.z, block)
@@ -92,7 +92,7 @@ end
 ---@param x integer
 ---@param y integer
 ---@param z integer
----@param block Block
+---@param block BlocksInstruction
 ---@return boolean
 function Chunk:setBlockAbsolute(x, y, z, block)
     local i, chunk = self:prepareCoordinates(x, y, z)
@@ -105,7 +105,7 @@ function Chunk:setBlockAbsolute(x, y, z, block)
 end
 
 ---Adds a block to this chunk
----@param block Block
+---@param block BlocksInstruction
 ---@return boolean
 function Chunk:addBlock(block)
     return self:setBlockRelative(block.x, block.y, block.z, block)
@@ -115,7 +115,7 @@ end
 ---@param x integer
 ---@param y integer
 ---@param z integer
----@return Block | false
+---@return BlocksInstruction | false
 function Chunk:deleteBlockRelative(x, y, z)
     return self:deleteBlockAbsolute(x - self.x, y - self.y, z - self.z)
 end
@@ -124,7 +124,7 @@ end
 ---@param x integer
 ---@param y integer
 ---@param z integer
----@return Block | false
+---@return BlocksInstruction | false
 function Chunk:deleteBlockAbsolute(x, y, z)
     local i, chunk = self:prepareCoordinates(x, y, z)
     local block = chunk.blocks[i]

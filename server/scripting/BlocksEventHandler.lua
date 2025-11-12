@@ -2,7 +2,7 @@
 ---@field script BlocksScript
 ---@field instruction integer
 
----@class BlocksEventHandler: class
+---@class BlocksEventHandler: class, Serializable
 ---@field handlers table<Event, BlocksScript>
 ---@field callStack BlocksScriptState[]
 ---@field variables table
@@ -45,9 +45,15 @@ function BlocksEventHandler:jumpBack()
     state.instruction = state.instruction - 1
 end
 
----Initializes a block to be ran later
-function BlocksEventHandler:initBlock()
-    
+---Returns a variable from the handler by following the path
+---@param path VariablePath
+---@return any | nil
+function BlocksEventHandler:getVariable(path)
+    if type(path) ~= "table" then return end
+    for i = 1, #path do
+        self = self[path[i]]
+    end
+    return self
 end
 
 ---Triggers the script associated with this event

@@ -1,0 +1,2 @@
+---@class UiComponent
+---@field draw fun(self: self, ...: any)

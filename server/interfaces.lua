@@ -4,8 +4,8 @@
 ---@field draw fun(self: self, buffer: Buffer3D)
 
 ---@class Serializable
----@field serialize fun(self: self, buffer: StringBuffer)
----@field deserialize fun(self: self, contents: string): self
+---@field serialize fun(self: self, buffer: BinaryReader)
+---@field deserialize fun(self: self, reader: BinaryReader): self
 
 ---@class ItemProvider
 ---@field providesItem fun(self: self, item: Item): boolean
