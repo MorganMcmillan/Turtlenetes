@@ -1,10 +1,10 @@
 ---@enum MessageType
 local MessageType = {
-    Success = 1,
-    Info = 2,
-    Warning = 3,
-    Error = 4,
-    Fatal = 5
+    Success = "Success",
+    Info = "Info",
+    Warning = "Warning",
+    Error = "Error",
+    Fatal = "Fatal"
 }
 
 return MessageType
