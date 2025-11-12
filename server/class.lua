@@ -37,6 +37,9 @@ function class:new(...)
     return instance
 end
 
+---Applies a mixin to the class, allowing code reuse without inheritance
+---@param mixin table
+---@return self
 function class:with(mixin)
     for k, f in pairs(mixin) do
         self[k] = f

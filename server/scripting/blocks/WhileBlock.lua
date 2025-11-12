@@ -1,22 +1,24 @@
----@class WhileBlock: class, BlocksInstruction
----@field condition BlocksExpression
-local WhileBlock = require("class"):extend("WhileBlock")
+local BlocksExpression = require("BlocksExpression")
+local BlocksScript = require("BlocksScript")
+---@class WhileBlock: BlocksInstruction
+local WhileBlock = require("BlocksInstruction"):extend("WhileBlock")
 WhileBlock.displayName = "While"
-WhileBlock.inputs = 1
-WhileBlock.branches = 1
-
-function WhileBlock:init(body, condition)
-    self.condition = condition
-    self.body = body
-end
+WhileBlock.inputCount = 1
+WhileBlock.branchCount = 1
 
 ---@param handler BlocksEventHandler
 function WhileBlock:run(handler)
-    local condition = self.condition:evaluate(handler)
+    local condition = self.inputs[1]:evaluate(handler)
     if condition then
         handler:jumpBack()
-        handler:push(self.body)
+        handler:push(self.branches[1])
     end
+end
+
+function WhileBlock:deserialize(reader)
+    local condition = BlocksExpression:deserialize(reader)
+    local body = BlocksScript:deserialize(reader)
+    return self:new({condition}, {body})
 end
 
 return WhileBlock

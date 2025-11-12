@@ -1,14 +1,18 @@
----@class IfBlock: class, BlocksInstruction
+local BlocksExpression = require("BlocksExpression")
+local BlocksScript = require("BlocksScript")
+
+---@class IfBlock: BlocksInstruction
 ---@field [true] BlocksScript
 ---@field [false] BlocksScript
-local IfBlock = require("class"):extend("IfBlock")
-IfBlock.name = "If"
+local IfBlock = require("BlocksInstruction"):extend("IfBlock")
+IfBlock.displayName = "If"
 IfBlock.inputs = 1
 IfBlock.branches = 2
 
-function IfBlock:init(handler)
-    self[true] = self.branches[1]
-    self[false] = self.branches[2]
+function IfBlock:init(condition, ifBranch, elseBranch)
+    self.super.init(self, {condition}, {ifBranch, elseBranch})
+    self[true] = ifBranch
+    self[false] = elseBranch
 end
 
 function IfBlock:run(handler)
@@ -18,6 +22,13 @@ function IfBlock:run(handler)
     if branch then
         handler:push(branch)
     end
+end
+
+function IfBlock:deserialize(reader)
+    local condition = BlocksExpression:deserialize(reader)
+    local ifBranch = BlocksScript:deserialize(reader)
+    local elseBranch = BlocksScript:deserialize(reader)
+    return self:new(condition, ifBranch, elseBranch)
 end
 
 return IfBlock

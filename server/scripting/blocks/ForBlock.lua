@@ -1,19 +1,28 @@
+local BlocksExpression = require("BlocksExpression")
+local BlocksScript = require("BlocksScript")
 -- TODO: this block will be finished later
 
----@class ForBlock: class, BlocksInstruction
+---@class ForBlock: BlocksInstruction
 ---@field body BlocksScript
 ---@field first number
 ---@field last number
 ---@field step number
 ---@field current number
-local ForBlock = require("Block"):extend("ForBlock")
+local ForBlock = require("BlocksInstruction"):extend("ForBlock")
 ForBlock.displayName = "For"
 ForBlock.inputCount = 3
 ForBlock.branchCount = 1
 
-function ForBlock:init(handler)
-    self.super.init(self, handler)
-    self:initLoop(handler)
+function ForBlock:init(first, last, step, body)
+    self.super.init(self, {first, last, step}, {body})
+end
+
+function ForBlock:deserialize(reader)
+    local first = BlocksExpression:deserialize(reader)
+    local last = BlocksExpression:deserialize(reader)
+    local step = BlocksExpression:deserialize(reader)
+    local body = BlocksScript:deserialize(reader)
+    return self:new(first, last, step, body)
 end
 
 function ForBlock:initLoop(handler)
@@ -22,9 +31,9 @@ function ForBlock:initLoop(handler)
         last,
         step
         =
-        handler:getVariable(self.inputs[1]),
-        handler:getVariable(self.inputs[2]),
-        handler:getVariable(self.inputs[3])
+        self.inputs[1]:evaluate(handler)
+        self.inputs[2]:evaluate(handler)
+        self.inputs[3]:evaluate(handler)
 
     if step == 0 then error("Step value cannot be zero") end
     if not last then

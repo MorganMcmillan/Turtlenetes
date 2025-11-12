@@ -1,5 +1,5 @@
----@class BlocksInstruction: Object3D
----@field name string
+---@class Block: Object3D
+---@field displayName string
 ---@field chunk Chunk
 local Block = require("Object3D"):extend("Block")
 

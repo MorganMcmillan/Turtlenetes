@@ -4,7 +4,7 @@ local rectangle = require("rectangle")
 ---@alias Constant number | string | boolean | nil
 
 ---A binary expression
----@class BlocksExpression: class, Serializable
+---@class BlocksExpression: class, UiComponent, SerializeSubclassMixin
 ---@field evaluate fun(self: self, handler: BlocksEventHandler): any
 ---@field inputs BlocksExpression[] | nil
 ---@field inputCount integer
@@ -13,6 +13,8 @@ local rectangle = require("rectangle")
 ---@field private subclasses BlocksExpression[]
 ---@field private serializationTag integer
 local BlocksExpression = require("class"):extend("BlocksExpression")
+BlocksExpression:with(require("SerializeSubclassMixin"))
+BlocksExpression.color = colors.lime
 BlocksExpression.subclasses = {}
 
 function BlocksExpression:init()
@@ -26,20 +28,6 @@ function BlocksExpression:__extend(subclass)
     local subclasses = self.subclasses
     subclasses[#subclasses+1] = subclass
     subclass.serializationTag = #subclasses
-end
-
----Writes this class's serialization tag
----This method MUST be called on every subclass that implements serialization
----@param writer BinaryWriter
-function BlocksExpression:serializeTag(writer)
-    writer:u8(self.serializationTag)
-end
-
----@param reader BinaryReader
-function BlocksExpression:deserialize(reader)
-    local tag = reader:u8()
-    local subclass = self.subclasses[tag]
-    return subclass:deserialize(reader)
 end
 
 function BlocksExpression:draw(x, y)
@@ -73,6 +61,13 @@ function BlocksExpression:draw(x, y)
     return rectangle.drawText(x, y, "]", color)
 end
 
+function BlocksExpression:serialize(writer)
+    self:serializeTag(writer)
+    for i = 1, self.inputCount do
+        self.inputs[i]:serialize(writer)
+    end
+end
+
 -- Operations like addition, subtractions, concatenation, and comparisons are implemented as subclasses of BlocksExpression
 
 local function defineBinaryExpression(name, operator)
@@ -89,13 +84,6 @@ local function defineBinaryExpression(name, operator)
         local right = self.inputs[2]
         right = right:evaluate(handler)
         return opFn(left, right)
-    end
-
-    function Expression:serialize(writer)
-        self:serializeTag(writer)
-        for i = 1, self.inputCount do
-            self.inputs[i]:serialize(writer)
-        end
     end
 
     function Expression:deserialize(reader)
@@ -134,11 +122,6 @@ function NotExpression:evaluate(handler)
         value = value:evaluate(handler)
     end
     return not value
-end
-
-function NotExpression:serialize(writer)
-    self:serializeTag(writer)
-    self.inputs[1]:serialize(writer)
 end
 
 function NotExpression:deserialize(reader)
