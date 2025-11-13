@@ -6,25 +6,86 @@ local Buffer3D = require("class"):extend("Buffer3D")
 
 function Buffer3D:drawCube(x, y, z, x2, y2, z2, color)
     -- I think this works. I ended up generating it.
+    -- FIXME: there's likely to be issues with backface rendering due to the order of points
     local cube = {
         -- Right face (x)
-        {x, y, z, x, y, z2, x, y2, z2, false, color},
-        {x, y, z, x, y2, z, x, y2, z2, false, color},
+        {
+            x, y, z,
+            x, y, z2,
+            x, y2, z2,
+            false, color, color
+        },
+        {
+            x, y2, z,
+            x, y, z,
+            x, y2, z2,
+            false, color, color
+        },
         -- Left face (x2)
-        {x2, y, z, x2, y2, z2, x2, y, z2, false, color},
-        {x2, y, z, x2, y2, z, x2, y2, z2, false, color},
+        {
+            x2, y, z,
+            x2, y2, z2,
+            x2, y, z2,
+            false, color, color
+        },
+        {
+            x2, y, z,
+            x2, y2, z,
+            x2, y2, z2,
+            false, color, color
+        },
         -- Bottom face (y)
-        {x, y, z, x2, y, z, x2, y, z2, false, color},
-        {x, y, z, x2, y, z2, x, y, z2, false, color},
+        {
+            x, y, z,
+            x2, y, z,
+            x2, y, z2,
+            false, color, color
+        },
+        {
+            x, y, z,
+            x2, y, z2,
+            x, y, z2,
+            false, color, color
+        },
         -- Top face (y2)
-        {x, y2, z, x2, y2, z2, x2, y2, z, false, color},
-        {x, y2, z, x, y2, z2, x2, y2, z2, false, color},
+        {
+            x, y2, z,
+            x2, y2, z2,
+            x2, y2, z,
+            false, color, color
+        },
+        {
+            x, y2, z,
+            x, y2, z2,
+            x2, y2, z2,
+            false, color, color
+        },
         -- Back face (z)
-        {x, y, z, x2, y2, z, x2, y, z, false, color},
-        {x, y, z, x, y2, z, x2, y2, z, false, color},
+        {
+            x, y, z,
+            x2, y, z,
+            x2, y2, z,
+            false, color, color
+        },
+        {
+            x, y2, z,
+            x, y, z,
+            x2, y2, z,
+            false, color, color
+        },
         -- Front face (z2)
-        {x, y, z2, x2, y, z2, x2, y2, z2, false, color},
-        {x, y, z2, x2, y2, z2, x, y2, z2, false, color},
+        {
+            x, y, z2,
+            x2, y, z2,
+            x2, y2, z2,
+            false, color, color
+        },
+        {
+            x, y, z2,
+            x2, y2, z2,
+            x, y2, z2,
+            false, color, color
+        },
     }
     table.insert(self.objects, cube)
 end

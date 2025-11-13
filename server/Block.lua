@@ -1,4 +1,4 @@
----@class Block: Object3D
+---@class Block: Object3D, Serializable
 ---@field displayName string
 ---@field chunk Chunk
 ---@field serializationTag integer
@@ -22,7 +22,7 @@ end
 ---@param binary string
 ---@return Block class, string name
 function Block:fromBinary(binary)
-    local tag = string.byte(binary)
+    local tag = byte(binary)
     return self.subclasses[tag] or self, sub(binary, 2)
 end
 

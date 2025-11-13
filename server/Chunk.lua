@@ -148,16 +148,13 @@ end
 ---Create a volume from this chunk
 ---@return Volume
 function Chunk:asVolume()
-    return Volume.fromObject3D(self, 16)
+    return Volume:fromObject3D(self, 16)
 end
 
 function Chunk:serialize(writer)
     writer:i32(self.x)
     writer:i32(self.y)
     writer:i32(self.z)
-    -- TODO: support blocks with extra data, like chests and turtles
-    -- Perhaps using byte tags
-    -- Construct block palette
     local blockPaletteIndexes = {}
     local currentBlock = 1 -- Block 0 is for air
     for i = 1, 4096 do
@@ -184,11 +181,7 @@ function Chunk:serialize(writer)
 end
 
 ---@param reader BinaryReader
-function Chunk:deserialize(reader)
-    local x = reader:i32()
-    local y = reader:i32()
-    local z = reader:i32()
-
+function Chunk:deserialize(reader, x, y, z)
     local blockPalette = reader:arrayOf(reader.string)
     local blockClasses = {}
     local blockNames = {}
@@ -196,6 +189,7 @@ function Chunk:deserialize(reader)
         local blockData = blockPalette[i]
         blockClasses[i], blockNames[i] = Block:fromBinary(blockData)
     end
+
     local blocks = {}
     for i = 1, 4096 do
         local blockData = reader:u8()
@@ -210,7 +204,7 @@ function Chunk:deserialize(reader)
         end
     end
 
-    return self:new(x, y, z, blocks)
+    return self:new(x * 16, y * 16, z * 16, blocks)
 end
 
 return Chunk

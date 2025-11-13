@@ -26,8 +26,14 @@ function Volume:__tostring()
     "\n}"
 end
 
-function Volume.fromObject3D(object, length, height, width)
-    return Volume:new(object.x, object.y, object.z, length, height, width)
+---(Static) creates a new volume with the starting point being made from an Object3D
+---@param object Object3D
+---@param length integer
+---@param height? integer
+---@param width? integer
+---@return Volume
+function Volume:fromObject3D(object, length, height, width)
+    return self:new(object.x, object.y, object.z, length, height, width)
 end
 
 ---Tests if an object is contained within this volume
@@ -47,12 +53,12 @@ function Volume:contains(object)
 end
 
 ---Creates a new volume contained within this volume, ensuring it fits
----@param x any
----@param y any
----@param z any
----@param length any
----@param height any
----@param width any
+---@param x? integer
+---@param y? integer
+---@param z? integer
+---@param length? integer
+---@param height? integer
+---@param width? integer
 function Volume:createSubVolume(x, y, z, length, height, width)
     x = x or self.x
     y = y or self.y
@@ -67,6 +73,21 @@ function Volume:createSubVolume(x, y, z, length, height, width)
     end
     subVolume.parent = self
     table.insert(self.children, subVolume)
+end
+
+function Volume:removeSubVolume(subVolume)
+    if subVolume.parent ~= self then
+        error("subVolume does not belong to this volume. Cannot remove.")
+    end
+    local index = 0
+    for i = 1, #self.children do
+        if self.children[i] == subVolume then
+            index = i
+            break
+        end
+    end
+    table.remove(self.children, index)
+    subVolume.parent = nil
 end
 
 return Volume

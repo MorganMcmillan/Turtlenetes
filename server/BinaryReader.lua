@@ -62,7 +62,7 @@ end
 function BinaryReader:boolean()
     local byte, position = unpack("<B", self.contents, self.position)
     self.position = position
-    return byte
+    return byte ~= 0
 end
 
 ---Deserializes an array of a single type

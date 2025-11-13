@@ -2,7 +2,7 @@
 ---@field x integer
 ---@field y integer
 ---@field z integer
----@field value any
+---@field value Serializable
 ---@field isRed boolean
 ---@field left RedBlackTree
 ---@field right RedBlackTree
@@ -195,6 +195,61 @@ local function insert(tree, x, y, z, value)
     end
 
     fixInsert(tree, node)
+end
+
+---@param tree RedBlackTree
+---@param writer BinaryWriter
+local function serialize(tree, writer)
+    writer:i32(tree.x)
+    writer:i32(tree.y)
+    writer:i32(tree.z)
+    writer:boolean(tree.isRed)
+
+    tree.value:serialize(writer)
+
+    local left = tree.left
+    if left then
+        writer:u8(1)
+        serialize(left, writer)
+    else
+        writer:u8(0)
+    end
+
+    local right = tree.right
+    if right then
+        writer:u8(1)
+        serialize(right, writer)
+    else
+        writer:u8(0)
+    end
+end
+
+---@param reader BinaryReader
+---@param valueClass Serializable
+local function deserialize(reader, valueClass)
+    local x = reader:i32()
+    local y = reader:i32()
+    local z = reader:i32()
+    local isRed = reader:boolean()
+
+    -- Extra parameters needed for chunk
+    ---@diagnostic disable-next-line: redundant-parameter
+    local value = valueClass:deserialize(reader, x, y, z)
+
+    local left, right = nil, nil
+    if reader:u8() ~= 0 then
+        left = deserialize(reader, valueClass)
+    end
+    if reader:u8() ~= 0 then
+        right = deserialize(reader, valueClass)
+    end
+
+    local node = createNode(x, y, z, value, left, right)
+    node.isRed = isRed
+    if left then left.parent = node end
+    if right then right.parent = node end
+
+    return node
 end
 
 return {

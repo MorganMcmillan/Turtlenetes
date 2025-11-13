@@ -1,6 +1,7 @@
 local RedBlackTree = require("RedBlackTree")
 local search = RedBlackTree.search
 local insert = RedBlackTree.insert
+local serialize, deserialize = RedBlackTree.serialize, RedBlackTree.deserialize
 local Chunk = require("Chunk")
 
 ---@class MetaChunk: class, Serializable
@@ -19,13 +20,24 @@ function MetaChunk:getChunk(x, y, z)
 end
 
 function MetaChunk:addChunk(x, y, z)
-    local chunk = Chunk:new(x, y, z)
+    local chunk = Chunk:new(x / 16, y / 16, z / 16)
     insert(self, x, y, z, chunk)
     -- TODO: Add chunk neighbors
 end
 
+function MetaChunk:serialize(writer)
+    serialize(self.root, writer)
+end
+
+---(Static)
+function MetaChunk:deserialize(reader)
+    local instance = self:create()
+    instance.root = deserialize(reader, Chunk)
+    return instance
+end
+
 ---Gets a block using relative (global) coordinates
----@return BlocksInstruction | false
+---@return Block | false
 function MetaChunk:getBlock(x, y, z)
     return self:getChunk(x, y, z):getBlockRelative(x, y, z)
 end
