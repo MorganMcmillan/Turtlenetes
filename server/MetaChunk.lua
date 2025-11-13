@@ -19,10 +19,57 @@ function MetaChunk:getChunk(x, y, z)
     return search(self.root, x / 16, y / 16, z / 16)
 end
 
+local function addNeighbors(tree, chunk, x, y, z)
+    local neighbor = nil
+
+    neighbor = search(tree, x, y, z - 1)
+    chunk.neighbors[1] = neighbor
+    if neighbor then neighbor.neighbors[3] = chunk end
+
+    neighbor = search(tree, x + 1, y, z)
+    chunk.neighbors[2] = neighbor
+    if neighbor then neighbor.neighbors[4] = chunk end
+    
+    neighbor = search(tree, x, y, z - 1)
+    chunk.neighbors[3] = neighbor
+    if neighbor then neighbor.neighbors[1] = chunk end
+
+    neighbor = search(tree, x - 1, y, z)
+    chunk.neighbors[4] = neighbor
+    if neighbor then neighbor.neighbors[2] = chunk end
+
+    neighbor = search(tree, x, y + 1, z)
+    chunk.neighbors[5] = neighbor
+    if neighbor then neighbor.neighbors[6] = chunk end
+
+    neighbor = search(tree, x, y - 1, z)
+    chunk.neighbors[6] = neighbor
+    if neighbor then neighbor.neighbors[5] = chunk end
+end
+
+local function fixChunkNeighbors(tree)
+    addNeighbors(tree, tree.value, tree.x, tree.y, tree.z)
+
+    local left = tree.left
+    if left then
+        fixChunkNeighbors(left)
+    end
+
+    local right = tree.left
+    if right then
+        fixChunkNeighbors(right)
+    end
+end
+
 function MetaChunk:addChunk(x, y, z)
-    local chunk = Chunk:new(x / 16, y / 16, z / 16)
+    local chunk = Chunk:new(x, y, z)
+    x, y, z = x / 16, y / 16, z / 16
     insert(self, x, y, z, chunk)
-    -- TODO: Add chunk neighbors
+    
+    -- Add neighbors
+    addNeighbors(self, chunk, x, y, z)
+
+    return chunk
 end
 
 function MetaChunk:serialize(writer)
@@ -33,6 +80,7 @@ end
 function MetaChunk:deserialize(reader)
     local instance = self:create()
     instance.root = deserialize(reader, Chunk)
+    fixChunkNeighbors(instance)
     return instance
 end
 

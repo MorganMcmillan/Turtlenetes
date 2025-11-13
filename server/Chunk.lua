@@ -5,7 +5,7 @@ local Volume = require("Volume")
 ---Blocks are indexed using zero-based coordinates, unlike Lua's one-based indexes.
 ---@class Chunk: Object3D, Serializable
 ---@field blocks (Block | false)[]
----@field neighbors Chunk[] chunks neighboring on each side, in the order of North, East, South, West, Up, Down
+---@field neighbors Chunk[] chunks neighboring on each side, in the order of North (-z), East (+x), South, West, Up, Down
 local Chunk = require("Object3D"):extend("Chunk")
 
 function Chunk:init(x, y, z, blocks)
