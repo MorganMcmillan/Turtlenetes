@@ -11,6 +11,7 @@ function class:__tostring()
     return "class '" .. self.name .. "'"
 end
 
+--- Extends a base class
 --- @generic T
 --- @param self T | class
 --- @return T
@@ -25,6 +26,7 @@ function class:extend(name)
     return heir
 end
 
+--- Create a new instance of this class, calling `init` with parameters if it exists
 --- @generic T
 --- @param self T | class
 --- @return T
@@ -35,6 +37,14 @@ function class:new(...)
         init(instance, ...)
     end
     return instance
+end
+
+--- Create a new instance of this class without calling `init`
+--- @generic T
+--- @param self T | class
+--- @return T
+function class:create()
+    return setmetatable({}, self)
 end
 
 ---Applies a mixin to the class, allowing code reuse without inheritance

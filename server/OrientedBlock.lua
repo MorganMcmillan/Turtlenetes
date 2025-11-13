@@ -1,6 +1,11 @@
----@class OrientedBlock: BlocksInstruction
+local Block = require("Block")
+
+---@class OrientedBlock: Block
 ---@field orientation string
-local OrientedBlock = require("Block"):extend("OrientedBlock")
+local OrientedBlock = Block:extend("OrientedBlock")
+OrientedBlock.serializationTag = 1
+Block.subclasses[1] = OrientedBlock
+
 
 function OrientedBlock:init(x, y, z, orientation)
     self.super.init(self, x, y, z)

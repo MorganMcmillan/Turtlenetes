@@ -10,8 +10,7 @@ local rectangle = require("rectangle")
 ---@field inputCount integer
 ---@field operator string
 ---@field color integer
----@field private subclasses BlocksExpression[]
----@field private serializationTag integer
+---@field expressions table<string, BlocksExpression>
 local BlocksExpression = require("class"):extend("BlocksExpression")
 BlocksExpression:with(require("SerializeSubclassMixin"))
 BlocksExpression.color = colors.lime
@@ -94,7 +93,7 @@ local function defineBinaryExpression(name, operator)
         return instance
     end
 
-    BlocksExpression[className] = Expression
+    BlocksExpression.expressions[className] = Expression
 end
 
 defineBinaryExpression("Add", "+")
@@ -129,5 +128,7 @@ function NotExpression:deserialize(reader)
     instance.inputs[1] = BlocksExpression:deserialize(reader)
     return instance
 end
+
+BlocksExpression.expressions.NotExpression = NotExpression
 
 return BlocksExpression

@@ -15,6 +15,12 @@ function Object3D:xyz()
     return self.x, self.y, self.z
 end
 
+function Object3D:setXYZ(x, y, z)
+    self.x = x
+    self.y = y
+    self.z = z
+end
+
 function Object3D:setPosition(other)
     self.x = other.x
     self.y = other.y

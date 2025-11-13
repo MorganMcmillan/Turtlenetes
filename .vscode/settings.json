@@ -3,6 +3,10 @@
         "colors",
         "fs",
         "paintutils",
-        "term"
+        "term",
+        "bit"
+    ],
+    "Lua.diagnostics.disable": [
+        "deprecated"
     ]
 }

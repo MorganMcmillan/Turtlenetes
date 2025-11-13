@@ -5,11 +5,11 @@
 ---@field inputs BlocksExpression[] | nil
 ---@field branches BlocksScript[] | nil
 ---@field color integer
----@field private serializationTag integer
----@field private subclasses BlocksInstruction[]
+---@field instructions table<string, BlocksInstruction>
 local BlocksInstruction = require("class"):extend("BlocksInstruction")
 BlocksInstruction:with(require("SerializeSubclassMixin"))
 BlocksInstruction.subclasses = {}
+BlocksInstruction.instructions = {}
 BlocksInstruction.color = colors.yellow
 
 -- Because deserialization creates a subclass, we need to know ahead-of-time what that subclass is

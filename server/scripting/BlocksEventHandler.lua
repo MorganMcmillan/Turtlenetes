@@ -49,11 +49,12 @@ end
 ---@param path VariablePath
 ---@return any | nil
 function BlocksEventHandler:getVariable(path)
+    local variable = self.variables
     if type(path) ~= "table" then return end
     for i = 1, #path do
-        self = self[path[i]]
+        variable = variable[path[i]]
     end
-    return self
+    return variable
 end
 
 ---Triggers the script associated with this event

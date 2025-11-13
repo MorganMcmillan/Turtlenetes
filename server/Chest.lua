@@ -1,8 +1,12 @@
+local Block = require("Block")
+
 ---@class Chest: OrientedBlock, ItemProvider, Serializable
 ---@field filter Item | ItemFilter | nil
 ---@field connectedChest Chest | nil
 ---@field inventory Item[]
 local Chest = require("OrientedBlock"):extend("Chest")
+Chest.serializationTag = 2
+Block.subclasses[2] = Chest
 
 function Chest:updateInventory()
 -- TODO

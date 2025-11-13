@@ -1,10 +1,16 @@
 local Volume = require("Volume")
+local Block = require("Block")
 -- TODO
 
 ---@class Turtle: OrientedBlock
 ---@field address integer
 ---@field volume Volume
+---@field inventory Inventory
+---@field left Item
+---@field right Item
 local Turtle = require("OrientedBlock"):extend("Turtle")
+Turtle.serializationTag = 3
+Block.subclasses[3] = Turtle
 
 function Turtle:init(x, y, z, direction, volume, address)
     self.super.init(self, x, y, z, direction)
@@ -32,7 +38,6 @@ local function defineCommandUpDown(command)
 end
 
 defineCommand"getFuelLevel"
-Turtle.getFuel = Turtle.getFuelLevel
 defineCommand"getInventory"
 defineCommand"findItem"
 defineCommand"findItems"
@@ -49,7 +54,6 @@ defineCommandUpDown"drop"
 defineCommandUpDown"suck"
 defineCommandUpDown"compare"
 defineCommandUpDown"inspect"
-defineCommand""
 
 function Turtle:turnLeft()
     self.super.turnLeft(self)
@@ -59,6 +63,10 @@ end
 function Turtle:turnRight()
     self.super.turnRight(self)
     self:sendCommand("turnRight")
+end
+
+function Turtle:serialize(writer)
+    -- TODO: serialize connection, inventory, equipment, 
 end
 
 return Turtle
