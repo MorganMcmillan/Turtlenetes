@@ -1,4 +1,4 @@
----@class Item: class
+---@class Item: class, Serializable
 ---@field name string
 ---@field mod string
 ---@field tags table<string, true>

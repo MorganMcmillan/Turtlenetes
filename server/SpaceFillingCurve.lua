@@ -1,4 +1,4 @@
----@class SpaceFillingCurve: class
+---@class SpaceFillingCurve: class, Iterator
 local SpaceFillingCurve = require("class"):extend("SpaceFillingCurve")
 
 return SpaceFillingCurve

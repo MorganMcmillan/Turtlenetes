@@ -1,4 +1,4 @@
----@class ItemFilter: class
+---@class ItemFilter: class, Serializable
 local ItemFilter = require("class"):extend("ItemFilter")
 
 local function listToSet(list)

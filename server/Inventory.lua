@@ -1,4 +1,4 @@
----@class Inventory: class
+---@class Inventory: class, Serializable
 ---An abstract, server-side representation of an inventory
 ---@field lastEmptySlot integer the last empty slot since an item was added or removed
 ---@field itemsList [Item, integer][] the item and its count in this slot

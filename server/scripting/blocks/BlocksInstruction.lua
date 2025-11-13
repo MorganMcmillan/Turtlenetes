@@ -1,3 +1,4 @@
+---(Abstract)
 ---@class BlocksInstruction: class, UiComponent, SerializeSubclassMixin
 ---@field displayName string
 ---@field inputCount integer | nil

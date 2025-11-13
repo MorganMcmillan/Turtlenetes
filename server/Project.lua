@@ -19,7 +19,6 @@ function Project:init(volume, name)
     self.messages = {}
 end
 
----@param writer BinaryWriter
 function Project:serialize(writer)
     self.super.serialize(self, writer)
 
@@ -29,7 +28,6 @@ function Project:serialize(writer)
     -- Ignore messages (may be a mistake)
 end
 
----@param reader BinaryReader
 function Project:deserialize(reader)
     ---@type Project
     local instance = self.super:deserialize(reader):cast(self)

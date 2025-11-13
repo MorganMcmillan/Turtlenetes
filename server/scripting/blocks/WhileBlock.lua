@@ -1,5 +1,6 @@
 local BlocksExpression = require("BlocksExpression")
 local BlocksScript = require("BlocksScript")
+
 ---@class WhileBlock: BlocksInstruction
 local WhileBlock = require("BlocksInstruction"):extend("WhileBlock")
 WhileBlock.displayName = "While"

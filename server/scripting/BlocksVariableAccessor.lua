@@ -16,7 +16,6 @@ function VariableAccessor:fromString(str)
     return self:new(path)
 end
 
----@param writer BinaryWriter
 function VariableAccessor:serialize(writer)
     self:serializeTag(writer)
     writer:arrayOf(writer.string, self.path)

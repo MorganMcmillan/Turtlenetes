@@ -1,7 +1,8 @@
 ---@class Event: class
----@field repository table<table, Event>
+---@field repository table<table, Event> (Static)
 ---@field eventData table
 local Event = require("class"):extend("Event")
+Event.repository = {}
 
 -- TODO: figure out how events are going to be created, managed, and compared
 -- I specifically need a way to get the same instance with the same input.
@@ -11,8 +12,7 @@ function Event:new(eventData)
     if cachedEvent then
         return cachedEvent
     end
-    local event = setmetatable({}, self) --[[@as Event]]
-    event.eventData = eventData
+    local event = Event:create({eventData = eventData})
     Event.repository[eventData] = event
     return event
 end

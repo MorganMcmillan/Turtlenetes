@@ -4,7 +4,11 @@
         "fs",
         "paintutils",
         "term",
-        "bit"
+        "bit",
+        "rednet",
+        "peripheral",
+        "read",
+        "write"
     ],
     "Lua.diagnostics.disable": [
         "deprecated"

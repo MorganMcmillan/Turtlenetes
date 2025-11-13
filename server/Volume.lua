@@ -90,7 +90,6 @@ function Volume:removeSubVolume(subVolume)
     subVolume.parent = nil
 end
 
----@param writer BinaryWriter
 function Volume:serialize(writer)
     writer:i32(self.x)
     writer:i32(self.y)
@@ -101,7 +100,6 @@ function Volume:serialize(writer)
     writer:arrayOfClass(self.children)
 end
 
----@param reader BinaryReader
 function Volume:deserialize(reader)
     local instance = self:create({
         x = reader:i32(),

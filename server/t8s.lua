@@ -1,4 +1,4 @@
-function prompt(message)
+local function prompt(message)
     write(message)
     return read()
 end

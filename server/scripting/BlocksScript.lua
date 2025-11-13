@@ -22,20 +22,11 @@ function BlocksScript:tick(handler, pc)
 end
 
 function BlocksScript:serialize(writer)
-    local length = #self.instructions
-    writer:u16(length)
-    for i = 1, length do
-        self.instructions[i]:serialize(writer)
-    end
+    writer:arrayOfClass(self.instructions)
 end
 
 function BlocksScript:deserialize(reader)
-    local instructions = {}
-    local length = reader:u16()
-    for i = 1, length do
-        instructions[i] = BlocksInstruction:deserialize(reader)
-    end
-    return self:new(instructions)
+    return self:new(reader:arrayOfClass(BlocksInstruction))
 end
 
 return BlocksScript
