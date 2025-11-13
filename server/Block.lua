@@ -26,6 +26,7 @@ function Block:fromBinary(binary)
     return self.subclasses[tag] or self, sub(binary, 2)
 end
 
+---(Static)
 function Block:deserialize(_)
     -- Pass, return new instance instead
     return self:create()

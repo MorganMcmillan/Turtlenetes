@@ -47,6 +47,18 @@ function BinaryWriter:arrayOf(type, array)
     end
 end
 
+---Serializes an array of a Serializable class
+---@param array Serializable[]
+function BinaryWriter:arrayOfClass(array)
+    local length = #array
+    self:u16(length)
+    for i = 1, length do
+        array[i]:serialize(self)
+    end
+end
+
 function BinaryWriter:__tostring()
     return table.concat(self)
 end
+
+return BinaryWriter

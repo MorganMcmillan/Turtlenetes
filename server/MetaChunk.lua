@@ -78,8 +78,9 @@ end
 
 ---(Static)
 function MetaChunk:deserialize(reader)
-    local instance = self:create()
-    instance.root = deserialize(reader, Chunk)
+    local instance = self:create({
+        root = deserialize(reader, Chunk)
+    })
     fixChunkNeighbors(instance)
     return instance
 end

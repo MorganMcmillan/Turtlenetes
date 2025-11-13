@@ -42,9 +42,10 @@ end
 --- Create a new instance of this class without calling `init`
 --- @generic T
 --- @param self T | class
+--- @param object? T
 --- @return T
-function class:create()
-    return setmetatable({}, self)
+function class:create(object)
+    return setmetatable(object or {}, self)
 end
 
 ---Applies a mixin to the class, allowing code reuse without inheritance

@@ -77,3 +77,18 @@ function BinaryReader:arrayOf(type)
     end
     return array
 end
+
+---Deserializes an array of a Serializable class
+---@generic T
+---@param class Serializable | T
+---@return (Serializable | T)[]
+function BinaryReader:arrayOfClass(class)
+    local array = {}
+    local length = self:u16()
+    for i = 1, length do
+        array[i] = class:deserialize(self)
+    end
+    return array
+end
+
+return BinaryReader
