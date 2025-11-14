@@ -1,8 +1,8 @@
-local BlocksExpression = require("BlocksExpression")
+local BlocksExpression = require("scripting.BlocksExpression")
 local BlocksScript = require("BlocksScript")
 
 ---@class WhileBlock: BlocksInstruction
-local WhileBlock = require("BlocksInstruction"):extend("WhileBlock")
+local WhileBlock = require("scripting.blocks.BlocksInstruction"):extend("WhileBlock")
 WhileBlock.displayName = "While"
 WhileBlock.inputCount = 1
 WhileBlock.branchCount = 1

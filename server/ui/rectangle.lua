@@ -7,8 +7,21 @@ local rectangle = {}
 ---@param width integer
 ---@param height integer
 ---@param color integer
+---@return integer x, integer y next coordinates (horizontal or vertical exclusive)
 function rectangle.draw(x, y, width, height, color)
-    paintutils.drawFilledBox(x, y, x + width, y + height, color)
+    local x2, y2 = x + width, y + height
+    local sWidth, sHeight = term.getSize()
+    
+    -- Check if on screen, and cull if not
+    if not (
+        x <= 0 and x2 <= 0 or
+        y <= 0 and y2 <= 0 or
+        x > sWidth and x2 > sWidth or
+        y > sHeight and y2 > sHeight
+    ) then
+        paintutils.drawFilledBox(x, y, x2, y2, color)
+    end
+    return x2 + 1, y2 + 1
 end
 
 ---Draws text centered within a rectangle

@@ -1,6 +1,6 @@
 ---@class VariableAccessor: BlocksExpression
 ---@field path VariablePath
-local VariableAccessor = require("BlocksExpression"):extend("VariableAccessor")
+local VariableAccessor = require("scripting.BlocksExpression"):extend("VariableAccessor")
 VariableAccessor.color = colors.orange
 
 function VariableAccessor:init(path)

@@ -1,4 +1,4 @@
-local BlocksExpression = require("BlocksExpression")
+local BlocksExpression = require("scripting.BlocksExpression")
 local BlocksScript = require("BlocksScript")
 -- TODO: this block will be finished later
 
@@ -8,7 +8,7 @@ local BlocksScript = require("BlocksScript")
 ---@field last number
 ---@field step number
 ---@field current number
-local ForBlock = require("BlocksInstruction"):extend("ForBlock")
+local ForBlock = require("scripting.blocks.BlocksInstruction"):extend("ForBlock")
 ForBlock.displayName = "For"
 ForBlock.inputCount = 3
 ForBlock.branchCount = 1

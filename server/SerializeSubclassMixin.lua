@@ -20,6 +20,7 @@ function SerializeSubclassMixin:serializeTag(writer)
     writer:u8(self.serializationTag)
 end
 
+-- Note: subclasses must implement their own deserialize method, otherwise this will be called endlessly
 function SerializeSubclassMixin:deserialize(reader)
     local tag = reader:u8()
     local subclass = self.subclasses[tag]

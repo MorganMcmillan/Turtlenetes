@@ -1,5 +1,5 @@
 local MessageType = require("MessageType")
-local rectangle = require("rectangle")
+local rectangle = require("ui.rectangle")
 
 ---@class Message: class, UiComponent
 ---@field type MessageType

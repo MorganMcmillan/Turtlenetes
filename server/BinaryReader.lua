@@ -42,13 +42,13 @@ function BinaryReader:i16()
 end
 
 function BinaryReader:u32()
-    local int, position = unpack("<L", self.contents, self.position)
+    local int, position = unpack("<I", self.contents, self.position)
     self.position = position
     return int
 end
 
 function BinaryReader:i32()
-    local int, position = unpack("<l", self.contents, self.position)
+    local int, position = unpack("<i", self.contents, self.position)
     self.position = position
     return int
 end

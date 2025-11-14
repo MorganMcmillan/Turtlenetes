@@ -93,7 +93,7 @@ end
 function Volume:serialize(writer)
     writer:i32(self.x)
     writer:i32(self.y)
-    writer:i32(self.y)
+    writer:i32(self.z)
     writer:i32(self.length)
     writer:i32(self.width)
     writer:i32(self.height)
@@ -101,17 +101,25 @@ function Volume:serialize(writer)
 end
 
 function Volume:deserialize(reader)
+    local x = reader:i32()
+    local y = reader:i32()
+    local z = reader:i32()
+    local length = reader:i32()
+    local width = reader:i32()
+    local height = reader:i32()
+    local children = reader:arrayOfClass(Volume)
+
     local instance = self:create({
-        x = reader:i32(),
-        y = reader:i32(),
-        z = reader:i32(),
-        length = reader:i32(),
-        width = reader:i32(),
-        height = reader:i32(),
-        children = reader:arrayOfClass(Volume)
+        x = x,
+        y = y,
+        z = z,
+        length = length,
+        width = width,
+        height = height,
+        children = children
     })
 
-    for _, child in ipairs(instance.children) do
+    for _, child in ipairs(children) do
         child.parent = instance
     end
 

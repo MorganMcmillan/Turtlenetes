@@ -13,13 +13,6 @@ BlocksInstruction.subclasses = {}
 BlocksInstruction.instructions = {}
 BlocksInstruction.color = colors.yellow
 
--- Because deserialization creates a subclass, we need to know ahead-of-time what that subclass is
-function BlocksInstruction:__extend(subclass)
-    local subclasses = self.subclasses
-    subclasses[#subclasses+1] = subclass
-    subclass.serializationTag = #subclasses
-end
-
 function BlocksInstruction:init(inputs, branches)
     if self.inputCount then
         self.inputs = inputs or {}

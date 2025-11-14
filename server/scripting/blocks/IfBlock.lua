@@ -1,10 +1,10 @@
-local BlocksExpression = require("BlocksExpression")
+local BlocksExpression = require("scripting.BlocksExpression")
 local BlocksScript = require("BlocksScript")
 
 ---@class IfBlock: BlocksInstruction
 ---@field [true] BlocksScript
 ---@field [false] BlocksScript
-local IfBlock = require("BlocksInstruction"):extend("IfBlock")
+local IfBlock = require("scripting.blocks.BlocksInstruction"):extend("IfBlock")
 IfBlock.displayName = "If"
 IfBlock.inputs = 1
 IfBlock.branches = 2

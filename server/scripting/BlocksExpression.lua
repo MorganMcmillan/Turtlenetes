@@ -1,4 +1,4 @@
-local rectangle = require("rectangle")
+local rectangle = require("ui.rectangle")
 
 ---@alias VariablePath (string|integer)[]
 ---@alias Constant number | string | boolean | nil
@@ -13,20 +13,14 @@ local rectangle = require("rectangle")
 ---@field expressions table<string, BlocksExpression>
 local BlocksExpression = require("class"):extend("BlocksExpression")
 BlocksExpression:with(require("SerializeSubclassMixin"))
-BlocksExpression.color = colors.lime
 BlocksExpression.subclasses = {}
+BlocksExpression.color = colors.lime
+BlocksExpression.expressions = {}
 
 function BlocksExpression:init()
     if self.inputCount then
         self.inputs = {}
     end
-end
-
--- Because deserialization creates a subclass, we need to know ahead-of-time what that subclass is
-function BlocksExpression:__extend(subclass)
-    local subclasses = self.subclasses
-    subclasses[#subclasses+1] = subclass
-    subclass.serializationTag = #subclasses
 end
 
 function BlocksExpression:draw(x, y)

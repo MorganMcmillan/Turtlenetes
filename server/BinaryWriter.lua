@@ -20,11 +20,11 @@ function BinaryWriter:i16(short)
 end
 
 function BinaryWriter:u32(int)
-    self[#self+1] = pack("<L", int)
+    self[#self+1] = pack("<I", int)
 end
 
 function BinaryWriter:i32(int)
-    self[#self+1] = pack("<l", int)
+    self[#self+1] = pack("<i", int)
 end
 
 function BinaryWriter:string(string)

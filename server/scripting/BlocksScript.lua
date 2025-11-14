@@ -1,4 +1,4 @@
-local BlocksInstruction = require("BlocksInstruction")
+local BlocksInstruction = require("scripting.blocks.BlocksInstruction")
 
 ---@class BlocksScript: class, Serializable
 ---@field instructions BlocksInstruction[]
