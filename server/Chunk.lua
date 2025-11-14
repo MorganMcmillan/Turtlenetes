@@ -153,8 +153,8 @@ end
 
 function Chunk:serialize(writer)
     writer:i32(self.x)
-    writer:i32(self.y)
-    writer:i32(self.z)
+        :i32(self.y)
+        :i32(self.z)
     local blockPaletteIndexes = {}
     local currentBlock = 1 -- Block 0 is for air
     for i = 1, 4096 do

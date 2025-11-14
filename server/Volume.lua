@@ -92,12 +92,12 @@ end
 
 function Volume:serialize(writer)
     writer:i32(self.x)
-    writer:i32(self.y)
-    writer:i32(self.z)
-    writer:i32(self.length)
-    writer:i32(self.width)
-    writer:i32(self.height)
-    writer:arrayOfClass(self.children)
+        :i32(self.y)
+        :i32(self.z)
+        :i32(self.length)
+        :i32(self.width)
+        :i32(self.height)
+        :arrayOfClass(self.children)
 end
 
 function Volume:deserialize(reader)

@@ -23,7 +23,7 @@ function Project:serialize(writer)
     self.super.serialize(self, writer)
 
     writer:string(self.name)
-    writer:arrayOfClass(self.turtles)
+        :arrayOfClass(self.turtles)
     self.chunks:serialize(writer)
     -- Ignore messages (may be a mistake)
 end

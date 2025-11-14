@@ -201,9 +201,9 @@ end
 ---@param writer BinaryWriter
 local function serialize(tree, writer)
     writer:i32(tree.x)
-    writer:i32(tree.y)
-    writer:i32(tree.z)
-    writer:boolean(tree.isRed)
+        :i32(tree.y)
+        :i32(tree.z)
+        :boolean(tree.isRed)
 
     tree.value:serialize(writer)
 

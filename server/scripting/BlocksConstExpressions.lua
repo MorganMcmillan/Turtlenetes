@@ -41,12 +41,10 @@ function BlocksConstExpression:serialize(writer)
     if t == "nil" then
         writer:u8(0)
     elseif t == "string" then
-        writer:u8(1)
-        writer:string(value)
+        writer:u8(1):string(value)
     elseif t == "number" then
-        writer:u8(2)
-        writer:i32(value)
-    elseif self.value then
+        writer:u8(2):i32(value)
+    elseif self.value == true then
         writer:u8(3)
     else
         writer:u8(4)
