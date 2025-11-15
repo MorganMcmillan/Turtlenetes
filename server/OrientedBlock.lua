@@ -1,3 +1,5 @@
+local SerClass = require("SerClass")
+local types = SerClass.types
 local Block = require("Block")
 
 ---@class OrientedBlock: Block
@@ -6,6 +8,10 @@ local OrientedBlock = Block:extend("OrientedBlock")
 OrientedBlock.serializationTag = 1
 Block.subclasses[1] = OrientedBlock
 
+OrientedBlock.schema = {
+    super = Block,
+    {"orientation", types.enum{"North", "East", "South", "West"}}
+}
 
 function OrientedBlock:init(x, y, z, orientation)
     self.super.init(self, x, y, z)

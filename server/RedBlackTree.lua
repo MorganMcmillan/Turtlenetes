@@ -197,51 +197,65 @@ local function insert(tree, x, y, z, value)
     fixInsert(tree, node)
 end
 
----@param tree RedBlackTree
----@param writer BinaryWriter
-local function serialize(tree, writer)
-    writer:i32(tree.x)
-        :i32(tree.y)
-        :i32(tree.z)
-        :boolean(tree.isRed)
+local SerClass = require("SerClass")
+local rawSerialize, rawDeserialize = SerClass.rawSerialize, SerClass.rawDeserialize
 
-    tree.value:serialize(writer)
+local pack, unpack = string.pack, string.unpack
+
+---@param tree RedBlackTree
+---@param buffer Buffer
+local function serialize(tree, buffer)
+    buffer[#buffer+1] = pack("<i", tree.x)
+    buffer[#buffer+1] = pack("<i", tree.y)
+    buffer[#buffer+1] = pack("<i", tree.z)
+    buffer[#buffer+1] = pack("<B", tree.isRed and 1 or 0)
+
+    rawSerialize(tree.value, nil, buffer)
 
     local left = tree.left
     if left then
-        writer:u8(1)
-        serialize(left, writer)
+        buffer[#buffer+1] = pack("<B", 1)
+        serialize(left, buffer)
     else
-        writer:u8(0)
+        buffer[#buffer+1] = pack("<B", 0)
     end
 
     local right = tree.right
     if right then
-        writer:u8(1)
-        serialize(right, writer)
+        buffer[#buffer+1] = pack("<B", 1)
+        serialize(right, buffer)
     else
-        writer:u8(0)
+        buffer[#buffer+1] = pack("<B", 0)
     end
 end
 
----@param reader BinaryReader
----@param valueClass Serializable
-local function deserialize(reader, valueClass)
-    local x = reader:i32()
-    local y = reader:i32()
-    local z = reader:i32()
-    local isRed = reader:boolean()
+local Chunk = require("Chunk")
 
+local function deserialize(bin, pos)
+    local x, y, z, isRed, value, left, right
+    x, pos = unpack("<i", bin, pos)
+    y, pos = unpack("<i", bin, pos)
+    z, pos = unpack("<i", bin, pos)
+    isRed, pos = unpack("<B", bin, pos)
+    isRed = isRed ~= 0
+    
     -- Extra parameters needed for chunk
     ---@diagnostic disable-next-line: redundant-parameter
-    local value = valueClass:deserialize(reader, x, y, z)
+    value, pos = rawDeserialize(Chunk, bin, pos)
+    value.x = x / 16
+    value.y = y / 16
+    value.z = z / 16
+    
+    left, right = nil, nil
+    local hasLeft, hasRight
 
-    local left, right = nil, nil
-    if reader:u8() ~= 0 then
-        left = deserialize(reader, valueClass)
+    hasLeft, pos = unpack("<B", bin, pos)
+    if hasLeft ~= 0 then
+        left, pos = deserialize(bin, pos)
     end
-    if reader:u8() ~= 0 then
-        right = deserialize(reader, valueClass)
+    hasRight, pos = unpack("<B", bin, pos)
+    if hasRight ~= 0 then
+        right, pos = deserialize(bin, pos)
     end
 
     local node = createNode(x, y, z, value, left, right)
@@ -256,4 +270,6 @@ return {
     createNode = createNode,
     search = search,
     insert = insert,
+    serialize = serialize,
+    deserialize = deserialize
 }

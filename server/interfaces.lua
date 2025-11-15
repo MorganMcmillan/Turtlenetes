@@ -9,18 +9,6 @@ local Drawable3D
 ---@param buffer Buffer3D
 function Drawable3D:draw(buffer) end
 
----@class Serializable
-local Serializable
-
----Serializes this object into a binary format
----@param writer BinaryWriter
-function Serializable:serialize(writer) end
-
----Deserializes this object from a binary format
----@param reader BinaryReader
----@return self
-function Serializable:deserialize(reader) end
-
 ---@class ItemProvider
 local ItemProvider
 

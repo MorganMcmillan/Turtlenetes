@@ -1,6 +1,8 @@
 local Volume = require("Volume")
 local MetaChunk = require("MetaChunk")
 local Turtle = require("Turtle")
+local SerClass = require("SerClass")
+local types = SerClass.types
 
 ---@class Project: Volume, Serializable
 ---@field super Volume
@@ -10,6 +12,12 @@ local Turtle = require("Turtle")
 ---@field messages Message[]
 local Project = require("Volume"):extend("Project")
 
+Project.schema = {
+    super = Project.super,
+    {"name", types.string},
+    {"chunks", MetaChunk},
+}
+
 function Project:init(volume, name)
     -- Don't do this: I'm abusing mixins to copy table fields
     self:with(volume)
@@ -17,26 +25,6 @@ function Project:init(volume, name)
     self.turtles = {}
     self.chunks = MetaChunk:new()
     self.messages = {}
-end
-
-function Project:serialize(writer)
-    self.super.serialize(self, writer)
-
-    writer:string(self.name)
-        :arrayOfClass(self.turtles)
-    self.chunks:serialize(writer)
-    -- Ignore messages (may be a mistake)
-end
-
-function Project:deserialize(reader)
-    ---@type Project
-    local instance = self.super:deserialize(reader):cast(self)
-
-    instance.name = reader:string()
-    instance.turtles = reader:arrayOfClass(Turtle)
-    instance.chunks = MetaChunk:deserialize(reader)
-
-    return instance
 end
 
 return Project

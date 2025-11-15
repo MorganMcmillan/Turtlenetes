@@ -180,7 +180,6 @@ function Chunk:serialize(writer)
     end
 end
 
----@param reader BinaryReader
 function Chunk:deserialize(reader, x, y, z)
     local blockPalette = reader:arrayOf(reader.string)
     local blockClasses = {}

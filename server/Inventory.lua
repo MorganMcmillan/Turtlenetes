@@ -1,9 +1,17 @@
+local types = require("SerClass").types
+local Item = require("Item")
+
 ---@class Inventory: class, Serializable
 ---An abstract, server-side representation of an inventory
 ---@field lastEmptySlot integer the last empty slot since an item was added or removed
 ---@field itemsList [Item, integer][] the item and its count in this slot
 ---@field itemsMap table<Item, { totalCount: integer, [integer]: integer}> a mapping of items to their counts and a map of slots to individual slot counts
 local Inventory = require("class"):extend("Inventory")
+
+Inventory.schema = {
+    {"lastEmptySlot", types.u16},
+    {"itemsList", types.map(types.u16, types.tuple(Item, types.u8))}
+}
 
 ---@param physicalInventory PhysicalInventory
 ---@param itemRepository ItemRepository

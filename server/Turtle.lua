@@ -1,10 +1,15 @@
 local Volume = require("Volume")
+local Inventory = require("Inventory")
+local Item = require("Item")
 local Block = require("Block")
+local SerClass = require("SerClass")
+local types = SerClass.types
 -- TODO
 
 ---@class Turtle: OrientedBlock
 ---@field address integer
 ---@field volume Volume
+---@field fuel integer
 ---@field inventory Inventory
 ---@field left Item
 ---@field right Item
@@ -12,10 +17,20 @@ local Turtle = require("OrientedBlock"):extend("Turtle")
 Turtle.serializationTag = 3
 Block.subclasses[3] = Turtle
 
+Turtle.schema = {
+    super = Turtle.super,
+    {"address", types.u16},
+    {"fuel", types.u32},
+    {"inventory", Inventory},
+    {"left", Item},
+    {"right", Item}
+}
+
 function Turtle:init(x, y, z, direction, volume, address)
     self.super.init(self, x, y, z, direction)
     self.volume = volume
     self.address = address
+    self:refresh()
 end
 
 function Turtle:sendCommand(method, ...)

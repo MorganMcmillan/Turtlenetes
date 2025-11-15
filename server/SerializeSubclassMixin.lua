@@ -13,18 +13,4 @@ function SerializeSubclassMixin:__extend(subclass)
     subclass.serializationTag = #subclasses
 end
 
----Writes this class's serialization tag
----This method MUST be called on every subclass that implements serialization
----@param writer BinaryWriter
-function SerializeSubclassMixin:serializeTag(writer)
-    writer:u8(self.serializationTag)
-end
-
--- Note: subclasses must implement their own deserialize method, otherwise this will be called endlessly
-function SerializeSubclassMixin:deserialize(reader)
-    local tag = reader:u8()
-    local subclass = self.subclasses[tag]
-    return subclass:deserialize(reader)
-end
-
 return SerializeSubclassMixin

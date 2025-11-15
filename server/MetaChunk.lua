@@ -8,6 +8,10 @@ local Chunk = require("Chunk")
 ---@field root RedBlackTree
 local MetaChunk = require("class"):extend("MetaChunk")
 
+MetaChunk.schema = {
+    {"root", RedBlackTree}
+}
+
 function MetaChunk:init()
     local chunk = Chunk:new(0, 0, 0)
     self.root = RedBlackTree.createNode(0, 0, 0, chunk)
@@ -76,14 +80,7 @@ function MetaChunk:serialize(writer)
     serialize(self.root, writer)
 end
 
----(Static)
-function MetaChunk:deserialize(reader)
-    local instance = self:create({
-        root = deserialize(reader, Chunk)
-    })
-    fixChunkNeighbors(instance)
-    return instance
-end
+MetaChunk.onDeserialize = fixChunkNeighbors
 
 ---Gets a block using relative (global) coordinates
 ---@return Block | false

@@ -1,9 +1,18 @@
----@class Object3D: class, Drawable3D
+local SerClass = require("SerClass")
+local types = SerClass.types
+
+---@class Object3D: class, Serializable, Drawable3D
 ---@field x integer
 ---@field y integer
 ---@field z integer
 ---@field color? integer
 local Object3D = require("class"):extend("Object3D")
+
+Object3D.schema = {
+    {"x", types},
+    {"y", types},
+    {"z", types}
+}
 
 function Object3D:init(x, y, z)
     self.x = x

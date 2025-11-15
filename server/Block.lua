@@ -1,14 +1,21 @@
----@class Block: Object3D, Serializable
+local SerClass = require("SerClass")
+local types = SerClass.types
+
+---@class Block: Object3D
 ---@field displayName string
 ---@field chunk Chunk
 ---@field serializationTag integer
 ---@field subclasses Block[]
 local Block = require("Object3D"):extend("Block")
 Block.subclasses = {}
--- Note: I don't use the SerializeSubclassMixin because of how blocks are stored using a palette
+
+Block.schema = {
+    super = Block.super,
+    {"displayName", types.string}
+}
 
 function Block:init(x, y, z, name)
-    self.super.init(self, x, y, z)
+    Block.super.init(self, x, y, z)
     self.displayName = name
 end
 
