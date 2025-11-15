@@ -4,6 +4,7 @@ local types = SerClass.types
 ---@class Block: Object3D
 ---@field displayName string
 ---@field chunk Chunk
+---@field index integer
 ---@field serializationTag integer
 ---@field subclasses Block[]
 local Block = require("Object3D"):extend("Block")
@@ -19,6 +20,28 @@ function Block:init(x, y, z, name)
     self.displayName = name
 end
 
+function Block:moveUp()
+    local moved = self:movedUp()
+    if not self.chunk:getBlockRelative(moved.x, moved.y, moved.z) then
+        self:setPosition(moved)
+        self.chunk[self.index] = false
+        self.chunk:addBlock(self)
+        return true
+    end
+    return false
+end
+
+function Block:moveDown()
+    local moved = self:movedDown()
+    if not self.chunk:getBlockRelative(moved.x, moved.y, moved.z) then
+        self:setPosition(moved)
+        self.chunk[self.index] = false
+        self.chunk:addBlock(self)
+        return true
+    end
+    return false
+end
+
 local byte, char, pack, sub = string.byte, string.char, string.pack, string.sub
 
 function Block:toBinary()
@@ -31,12 +54,6 @@ end
 function Block:fromBinary(binary)
     local tag = byte(binary)
     return self.subclasses[tag] or self, sub(binary, 2)
-end
-
----(Static)
-function Block:deserialize(_)
-    -- Pass, return new instance instead
-    return self:create()
 end
 
 return Block

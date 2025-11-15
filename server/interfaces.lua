@@ -27,4 +27,13 @@ local Iterator
 
 function Iterator:iter() end
 
+---@class ActionProvider
+local ActionProvider
+
+---@param actor any
+function ActionProvider:initAction(actor) end
+
+---@param actor any
+function ActionProvider:act(actor) end
+
 ---@alias PhysicalInventory table<integer, { name: string, count: integer }>

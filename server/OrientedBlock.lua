@@ -1,5 +1,6 @@
 local SerClass = require("SerClass")
 local types = SerClass.types
+local Object3D = require("Object3D")
 local Block = require("Block")
 
 ---@class OrientedBlock: Block
@@ -14,7 +15,7 @@ OrientedBlock.schema = {
 }
 
 function OrientedBlock:init(x, y, z, orientation)
-    self.super.init(self, x, y, z)
+    Block.init(self, x, y, z)
     self.orientation = orientation or "North"
 end
 
@@ -39,5 +40,37 @@ local RIGHT_TURN = {
 function OrientedBlock:turnRight()
     self.orientation = RIGHT_TURN[self.orientation]
 end
+
+function OrientedBlock:movedForwards()
+    return Object3D.movedForwards(self, self.orientation)
+end
+
+function OrientedBlock:movedBackwards()
+    return Object3D.movedBackwards(self, self.orientation)
+end
+
+function OrientedBlock:moveForward()
+    local moved = self:movedForwards()
+    if not self.chunk:getBlockRelative(moved.x, moved.y, moved.z) then
+        self:setPosition(moved)
+        self.chunk[self.index] = false
+        self.chunk:addBlock(self)
+        return true
+    end
+    return false
+end
+
+function OrientedBlock:moveBackwards()
+    local moved = self:movedBackwards()
+    if not self.chunk:getBlockRelative(moved.x, moved.y, moved.z) then
+        self:setPosition(moved)
+        self.chunk[self.index] = false
+        self.chunk:addBlock(self)
+        return true
+    end
+    return false
+end
+
+
 
 return OrientedBlock

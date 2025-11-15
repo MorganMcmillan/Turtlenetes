@@ -14,13 +14,12 @@ Inventory.schema = {
 }
 
 ---@param physicalInventory PhysicalInventory
----@param itemRepository ItemRepository
-function Inventory:refresh(physicalInventory, itemRepository)
+function Inventory:refresh(physicalInventory)
     self.itemsList = {}
     self.itemsMap = {}
     
     for i, itemData in pairs(physicalInventory) do
-        local item = itemRepository:get(itemData.name)
+        local item = Item.repository:get(itemData.name)
         self.itemsList[i] = { item , itemData.count }
 
         local slotsRef = self.itemsMap[item] or { totalCount = 0 }

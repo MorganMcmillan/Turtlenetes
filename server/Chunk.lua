@@ -111,6 +111,7 @@ function Chunk:setBlockAbsolute(x, y, z, block)
     end
     chunk.blocks[i] = block
     block.chunk = chunk
+    block.index = i
     return true
 end
 

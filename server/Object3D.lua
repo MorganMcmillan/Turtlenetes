@@ -45,7 +45,7 @@ end
 ---Create a new Object3D moved in the direction
 ---@param direction string
 ---@return Object3D
-function Object3D:movedInDirection(direction)
+function Object3D:movedForwards(direction)
     local x, z = self.x, self.z
     if direction == "North" then
         z = z - 1
@@ -59,6 +59,20 @@ function Object3D:movedInDirection(direction)
         error("Invalid direction " .. direction .. ".")
     end
     return Object3D:new(x, self.y, z)
+end
+
+local OPPOSITE_DIRECTION = {
+    North = "South",
+    East = "West",
+    South = "North",
+    West = "East"
+}
+
+---Create a new Object3D moved in the opposite direction
+---@param direction string
+---@return Object3D
+function Object3D:movedBackwards(direction)
+    return self:movedForwards(OPPOSITE_DIRECTION[direction])
 end
 
 ---Create a new Object3D moved upwards

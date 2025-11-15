@@ -32,3 +32,5 @@ function Event:match(data)
     end
     return true
 end
+
+return Event
