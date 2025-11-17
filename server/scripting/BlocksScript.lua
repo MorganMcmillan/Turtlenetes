@@ -1,6 +1,6 @@
 local BlocksInstruction = require("scripting.blocks.BlocksInstruction")
 
----@class BlocksScript: class, Serializable
+---@class BlocksScript: class, Serializable, UiComponent
 ---@field instructions BlocksInstruction[]
 local BlocksScript = require("class"):extend("BlocksScript")
 

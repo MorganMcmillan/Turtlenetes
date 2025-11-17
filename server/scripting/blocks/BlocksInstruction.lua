@@ -22,7 +22,7 @@ function BlocksInstruction:init(inputs, branches)
     end
 end
 
-function BlocksInstruction:draw(x, y)
+function BlocksInstruction:ui(x, y)
     --TODO: figure out how to draw blocks, especially ones with multiple branches
 end
 

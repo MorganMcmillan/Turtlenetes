@@ -29,7 +29,7 @@ function Message:init(type, contents, source)
 	self.color = messageTypeColor(type)
 end
 
-function Message:draw(x, y, width, height)
+function Message:ui(x, y, width, height)
 	rectangle.draw(x, y, width, height, self.color)
 	rectangle.drawText(x + 1, y, self.type, self.color)
 	rectangle.drawTextWrapped(x + 1, y + 2, width - 1, height - 2, self.contents, self.color)

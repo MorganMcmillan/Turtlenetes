@@ -23,19 +23,19 @@ function BlocksExpression:init()
     end
 end
 
-function BlocksExpression:draw(x, y)
+function BlocksExpression:ui(x, y)
     local color = self.color
     -- Draw enclosing "[ ]" to signify where the expression is
     x = rectangle.drawText(x, y, "[", color)
 
     if self.inputCount == 2 then
-        x = self.inputs[1]:draw(x, y)
+        x = self.inputs[1]:ui(x, y)
         paintutils.drawPixel(x, y, color)
         x = x + 1
         x = rectangle.drawText(x, y, self.operator, color)
         paintutils.drawPixel(x, y, color)
         x = x + 1
-        x = self.inputs[2]:draw(x, y)
+        x = self.inputs[2]:ui(x, y)
         paintutils.drawPixel(x, y, color)
         
     else
@@ -44,7 +44,7 @@ function BlocksExpression:draw(x, y)
         x = x + 1
         if self.inputCount then
             for i = 1, self.inputCount do
-                x = self.inputs[i]:draw(x, y)
+                x = self.inputs[i]:ui(x, y)
                 paintutils.drawPixel(x, y, color)
                 x = x + 1
             end

@@ -6,7 +6,7 @@ local SerClass = require("SerClass")
 local types = SerClass.types
 -- TODO
 
----@class Turtle: OrientedBlock, ITurtle
+---@class Turtle: OrientedBlock, UiComponent, ITurtle
 ---@field address integer
 ---@field volume Volume
 ---@field fuel integer
@@ -208,6 +208,67 @@ function Turtle:turnRight()
     ---@diagnostic disable-next-line: undefined-field
     Turtle.super.turnRight(self)
     self:sendCommand("turnRight")
+end
+
+-- Impl UiComponent
+
+local rectangle = require("ui.rectangle")
+
+---Draw this turtle's information onto the right sidebar
+function Turtle:ui(x, y, width)
+    -- Address
+    y = rectangle.drawTextCentered(x, y, width, 1, "Address: " .. self.address)
+    -- position
+    local tx = x + 1
+    tx = rectangle.drawText(tx, y, "X: " .. self.x) + 1
+    tx = rectangle.drawText(tx, y, "Y: " .. self.y) + 1
+    rectangle.drawText(tx, y, "Z: " .. self.z)
+    y = y + 1
+    -- Facing direction
+    rectangle.drawText(x + 1, y, "Direction: " .. self.orientation)
+    y = y + 1
+    -- Fuel
+    rectangle.drawText(x + 1, y, "Fuel: " .. self.fuel)
+    y = y + 2
+    -- Split horizontally
+    local split = math.floor(width / 2)
+    -- Tools
+    self:drawTools(x, y, split)
+    -- Inventory
+    self:drawInventory(split + 1, y, split)
+end
+
+function Turtle:drawTools(x, y, width)
+    -- Left tool
+    rectangle.drawText(x + 1, y, "Left Tool")
+    y = y + 1
+    _, y = rectangle.draw(x + 1, y, width - 2, width - 1, self.left and colors.blue or colors.gray)
+    y = y + 1
+    -- Right tool
+    rectangle.drawText(x + 1, y, "Right Tool")
+    y = y + 1
+    rectangle.draw(x + 1, y, width - 2, width - 1, self.right and colors.blue or colors.gray)
+end
+
+function Turtle:drawInventory(x, y, width)
+    rectangle.drawText(x + 1, y, "Inventory")
+    for i = 1, 4 do
+        y = y + 2
+        local ox = x
+        for j = 0, 3 do
+            local item = self.inventory.itemsList[i + j * 4]
+            local color, count
+            if item then
+                color = colors.lightBlue
+                count = tostring(item[2])
+            else
+                color = colors.gray
+                count = "0"
+            end
+
+            ox = rectangle.drawBoxedText(ox, y, 4, 4, count, colors.lightGray, color) + 1
+        end
+    end
 end
 
 return Turtle

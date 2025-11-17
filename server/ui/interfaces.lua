@@ -1,4 +1,4 @@
 ---@class UiComponent
 local UiComponent
 
-function UiComponent:draw(...) end
+function UiComponent:ui(...) end

@@ -9,7 +9,7 @@ local rectangle = {}
 ---@param color integer
 ---@return integer x, integer y next coordinates (horizontal or vertical exclusive)
 function rectangle.draw(x, y, width, height, color)
-    local x2, y2 = x + width, y + height
+    local x2, y2 = x + width - 1, y + height - 1
     local sWidth, sHeight = term.getSize()
     
     -- Check if on screen, and cull if not
@@ -33,6 +33,7 @@ end
 ---@param text string
 ---@param bg? integer
 ---@param fg? integer
+---@return integer y
 function rectangle.drawTextCentered(x, y, width, height, text, bg, fg)
     bg = bg or colors.black
     fg = fg or colors.white
@@ -49,6 +50,7 @@ function rectangle.drawTextCentered(x, y, width, height, text, bg, fg)
     term.setBackgroundColor(bg)
     term.setTextColor(fg)
     term.write(text)
+    return y + height
 end
 
 ---Draws text wrapped around a box
@@ -82,6 +84,23 @@ function rectangle.drawText(x, y, text, bg, fg)
     term.setTextColor(fg or colors.white)
     term.write(text)
     return x + #text
+end
+
+---@param x integer
+---@param y integer
+---@param text string
+---@param borderColor integer
+---@param innerColor integer
+---@param fg? integer
+---@return integer x, integer y
+function rectangle.drawBoxedText(x, y, width, height, text, borderColor, innerColor, fg)
+    paintutils.drawBox(x, y, x + width - 1, y + height - 1, borderColor)
+    paintutils.drawFilledBox(x + 1, y + 1, x + width - 2, y + height - 2, innerColor)
+    term.setCursorPos(x + 1, y + 1)
+    term.setBackgroundColor(innerColor)
+    term.setTextColor(fg or colors.white)
+    term.write(text)
+    return x + width, y + height
 end
 
 return rectangle
