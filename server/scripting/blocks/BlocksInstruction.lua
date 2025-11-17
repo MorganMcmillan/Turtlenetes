@@ -13,6 +13,17 @@ BlocksInstruction.subclasses = {}
 BlocksInstruction.instructions = {}
 BlocksInstruction.color = colors.yellow
 
+local types = require("SerClass").types
+local BlocksScript = require("scripting.BlocksScript")
+local BlocksExpression = require("scripting.BlocksExpression")
+
+-- TODO: add the ability to read static fields from subclasses and use them for deserialization
+-- probably save this for the far future
+BlocksInstruction.schema = {
+    {"branches", types.array(BlocksScript)},
+    {"inputs", types.array(BlocksExpression)}
+}
+
 function BlocksInstruction:init(inputs, branches)
     if self.inputCount then
         self.inputs = inputs or {}
@@ -24,16 +35,6 @@ end
 
 function BlocksInstruction:ui(x, y)
     --TODO: figure out how to draw blocks, especially ones with multiple branches
-end
-
-function BlocksInstruction:serialize(writer)
-    self:serializeTag(writer)
-    for i = 1, self.inputCount or 0 do
-        self.inputs[i]:serialize(writer)
-    end
-    for i = 1, self.branchCount or 0 do
-        self.branches[i]:serialize(writer)
-    end
 end
 
 ---Runs this block's code

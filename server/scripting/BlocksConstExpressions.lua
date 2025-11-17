@@ -4,6 +4,13 @@
 ---@field value any
 local BlocksConstExpression = require("scripting.BlocksExpression"):extend("BlocksConstExpression")
 
+local types = require("SerClass").types
+
+BlocksConstExpression.schema = {
+    super = BlocksConstExpression.super,
+    {"text", types.string}
+}
+
 function BlocksConstExpression:init(text)
     self.text = text
     self:parseText()
@@ -33,37 +40,5 @@ function BlocksConstExpression:parseText()
         self.value = self.text
     end
 end
-function BlocksConstExpression:serialize(writer)
-    self:serializeTag(writer)
-    
-    local value = self.value
-    local t = type(value)
-    if t == "nil" then
-        writer:u8(0)
-    elseif t == "string" then
-        writer:u8(1):string(value)
-    elseif t == "number" then
-        writer:u8(2):i32(value)
-    elseif self.value == true then
-        writer:u8(3)
-    else
-        writer:u8(4)
-    end
-end
 
-function BlocksConstExpression:deserialize(reader)
-    local tag = reader:u8()
-    if tag == 0 then
-        return self:create({ text = "" })
-    elseif tag == 1 then
-        local value = reader:string()
-        return self:create({ text = "\"" .. value .. "\"", value = value})
-    elseif tag == 2 then
-        local value = reader:i32()
-        return self:create({ text = tostring(value), value = value })
-    elseif tag == 3 then
-        return self:create({ text = "true", value = true })
-    else
-        return self:create({ text = "false", value = false })
-    end
-end
+BlocksConstExpression.onDeserialize = BlocksConstExpression.parseText

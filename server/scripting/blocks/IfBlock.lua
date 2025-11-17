@@ -1,6 +1,3 @@
-local BlocksExpression = require("scripting.BlocksExpression")
-local BlocksScript = require("BlocksScript")
-
 ---@class IfBlock: BlocksInstruction
 ---@field [true] BlocksScript
 ---@field [false] BlocksScript
@@ -10,10 +7,16 @@ IfBlock.inputs = 1
 IfBlock.branches = 2
 
 function IfBlock:init(condition, ifBranch, elseBranch)
-    self.super.init(self, {condition}, {ifBranch, elseBranch})
-    self[true] = ifBranch
-    self[false] = elseBranch
+    IfBlock.super.init(self, {condition}, {ifBranch, elseBranch})
+    self:initBranches()
 end
+
+function IfBlock:initBranches()
+    self[true] = self.branches[1]
+    self[false] = self.branches[2]
+end
+
+IfBlock.onDeserialize = IfBlock.initBranches
 
 function IfBlock:run(handler)
     local condition = self.inputs[1]
@@ -22,13 +25,6 @@ function IfBlock:run(handler)
     if branch then
         handler:push(branch)
     end
-end
-
-function IfBlock:deserialize(reader)
-    local condition = BlocksExpression:deserialize(reader)
-    local ifBranch = BlocksScript:deserialize(reader)
-    local elseBranch = BlocksScript:deserialize(reader)
-    return self:new(condition, ifBranch, elseBranch)
 end
 
 return IfBlock

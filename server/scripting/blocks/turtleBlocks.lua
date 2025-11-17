@@ -1,5 +1,4 @@
 local BlocksInstruction = require("scripting.blocks.BlocksInstruction")
-local BlocksExpression = require("scripting.BlocksExpression")
 
 local function defineTurtleBlock(methodName, inputCount)
     local displayName = string.upper(methodName:sub(1, 1)) .. methodName:sub(2)
@@ -17,23 +16,10 @@ local function defineTurtleBlock(methodName, inputCount)
             local turtle = handler.variables.turtle
             return turtle[methodName](turtle, unpack(evaluatedInputs))
         end
-    
-        function Block:deserialize(reader)
-            local inputs = {}
-            for i = 1, inputCount do
-                inputs[i] = BlocksExpression:deserialize(reader)
-            end
-            return self:new(inputs)
-        end
     else
         function Block:run(handler)
             local turtle = handler.variables.turtle
             return turtle[methodName](turtle)
-        end
-
-        function Block:deserialize(_)
-            -- Pass, return new
-            return self:new()
         end
     end
 

@@ -341,7 +341,7 @@ end
 ---Serializes an array of a type.
 ---@generic T
 ---@param T Serializer<T>
----@param length integer The length of the array. If it is not provided then a dynamic length will be serialized and used.
+---@param length? integer The length of the array. If it is not provided then a dynamic length will be serialized and used.
 ---@return Serializer<T[]>
 function SerClass.types.array(T, length)
     if length then

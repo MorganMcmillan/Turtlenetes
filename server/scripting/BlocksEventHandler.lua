@@ -8,6 +8,14 @@
 ---@field variables table
 local BlocksEventHandler = require("class"):extend("BlocksEventHandler")
 
+local types = require("SerClass").types
+local Event = require("scripting.Event")
+local BlocksScript = require("scripting.BlocksScript")
+
+BlocksEventHandler.schema = {
+    {"handlers", types.map(Event, BlocksScript)}
+}
+
 function BlocksEventHandler:init(variables)
     self.handlers = {}
     self.callStack = {}

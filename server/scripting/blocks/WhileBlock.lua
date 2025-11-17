@@ -1,6 +1,3 @@
-local BlocksExpression = require("scripting.BlocksExpression")
-local BlocksScript = require("BlocksScript")
-
 ---@class WhileBlock: BlocksInstruction
 local WhileBlock = require("scripting.blocks.BlocksInstruction"):extend("WhileBlock")
 WhileBlock.displayName = "While"
@@ -14,12 +11,6 @@ function WhileBlock:run(handler)
         handler:jumpBack()
         handler:push(self.branches[1])
     end
-end
-
-function WhileBlock:deserialize(reader)
-    local condition = BlocksExpression:deserialize(reader)
-    local body = BlocksScript:deserialize(reader)
-    return self:new({condition}, {body})
 end
 
 return WhileBlock
