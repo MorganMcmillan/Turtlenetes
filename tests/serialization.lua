@@ -2,13 +2,14 @@
 -- cd server
 -- lua5.4 ../tests/serialization.lua
 
+-- TODO: this file needs to be rewritten for SerClass
+
 colors = {}
 
 ---@type xtest
 local x = loadfile("../tests/xtest.lua")()
 
-local BinaryReader = require("BinaryReader")
-local BinaryWriter = require("BinaryWriter")
+local SerClass = require("SerClass")
 local Volume = require("Volume")
 local BlocksInstruction = require("scripting.blocks.BlocksInstruction")
 require("scripting.blocks.turtleBlocks")

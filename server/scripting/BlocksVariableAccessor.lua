@@ -3,6 +3,12 @@
 local VariableAccessor = require("scripting.BlocksExpression"):extend("VariableAccessor")
 VariableAccessor.color = colors.orange
 
+local types = require("SerClass").types
+
+VariableAccessor.schema = {
+    {"path", types.array(types.string)}
+}
+
 function VariableAccessor:init(path)
     self.path = path
     self.operator = table.concat(path, ".")
@@ -14,15 +20,6 @@ function VariableAccessor:fromString(str)
         path[#path+1] = part
     end
     return self:new(path)
-end
-
-function VariableAccessor:serialize(writer)
-    self:serializeTag(writer)
-    writer:arrayOf(writer.string, self.path)
-end
-
-function VariableAccessor:deserialize(reader)
-    return self:new(reader:arrayOf(reader.string))
 end
 
 ---@param handler BlocksEventHandler

@@ -17,6 +17,12 @@ BlocksExpression.subclasses = {}
 BlocksExpression.color = colors.lime
 BlocksExpression.expressions = {}
 
+local types = require("SerClass").types
+
+BlocksExpression.schema = {
+    {"inputs", types.array(BlocksExpression)}
+}
+
 function BlocksExpression:init()
     if self.inputCount then
         self.inputs = {}
@@ -54,13 +60,6 @@ function BlocksExpression:ui(x, y)
     return rectangle.drawText(x, y, "]", color)
 end
 
-function BlocksExpression:serialize(writer)
-    self:serializeTag(writer)
-    for i = 1, self.inputCount do
-        self.inputs[i]:serialize(writer)
-    end
-end
-
 -- Operations like addition, subtractions, concatenation, and comparisons are implemented as subclasses of BlocksExpression
 
 local function defineBinaryExpression(name, operator)
@@ -77,14 +76,6 @@ local function defineBinaryExpression(name, operator)
         local right = self.inputs[2]
         right = right:evaluate(handler)
         return opFn(left, right)
-    end
-
-    function Expression:deserialize(reader)
-        local instance = self:new()
-        for i = 1, instance.inputCount do
-            instance.inputs[i] = BlocksExpression:deserialize(reader)
-        end
-        return instance
     end
 
     BlocksExpression.expressions[className] = Expression
@@ -115,12 +106,6 @@ function NotExpression:evaluate(handler)
         value = value:evaluate(handler)
     end
     return not value
-end
-
-function NotExpression:deserialize(reader)
-    local instance = self:new()
-    instance.inputs[1] = BlocksExpression:deserialize(reader)
-    return instance
 end
 
 BlocksExpression.expressions.NotExpression = NotExpression

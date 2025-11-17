@@ -4,6 +4,12 @@ local BlocksInstruction = require("scripting.blocks.BlocksInstruction")
 ---@field instructions BlocksInstruction[]
 local BlocksScript = require("class"):extend("BlocksScript")
 
+local types = require("SerClass").types
+
+BlocksScript.schema = {
+    {"instructions", types.array(BlocksInstruction)}
+}
+
 function BlocksScript:init(instructions)
     self.instructions = instructions or {}
 end
@@ -19,14 +25,6 @@ function BlocksScript:tick(handler, pc)
     else
         handler:pop()
     end
-end
-
-function BlocksScript:serialize(writer)
-    writer:arrayOfClass(self.instructions)
-end
-
-function BlocksScript:deserialize(reader)
-    return self:new(reader:arrayOfClass(BlocksInstruction))
 end
 
 return BlocksScript

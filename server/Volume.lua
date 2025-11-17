@@ -8,6 +8,16 @@ local Object3D = require("Object3D")
 ---@field children Volume[]
 local Volume = Object3D:extend("Volume")
 
+local types = require("SerClass").types
+
+Volume.schema = {
+    super = Volume.super
+    {"length", types.i32},
+    {"height", types.i32},
+    {"width", types.i32},
+    {"children", types.array(Volume)}
+}
+
 function Volume:init(x, y, z, length, height, width)
     self.super.init(self, x, y, z)
     self.length = length
@@ -90,40 +100,10 @@ function Volume:removeSubVolume(subVolume)
     subVolume.parent = nil
 end
 
-function Volume:serialize(writer)
-    writer:i32(self.x)
-        :i32(self.y)
-        :i32(self.z)
-        :i32(self.length)
-        :i32(self.width)
-        :i32(self.height)
-        :arrayOfClass(self.children)
-end
-
-function Volume:deserialize(reader)
-    local x = reader:i32()
-    local y = reader:i32()
-    local z = reader:i32()
-    local length = reader:i32()
-    local width = reader:i32()
-    local height = reader:i32()
-    local children = reader:arrayOfClass(Volume)
-
-    local instance = self:create({
-        x = x,
-        y = y,
-        z = z,
-        length = length,
-        width = width,
-        height = height,
-        children = children
-    })
-
-    for _, child in ipairs(children) do
-        child.parent = instance
+function Volume:onDeserialize()
+    for _, child in ipairs(self.children) do
+        child.parent = self
     end
-
-    return instance
 end
 
 return Volume
