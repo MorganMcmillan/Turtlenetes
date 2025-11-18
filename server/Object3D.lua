@@ -1,12 +1,11 @@
-local SerClass = require("SerClass")
-local types = SerClass.types
-
 ---@class Object3D: class, Serializable, Drawable3D
 ---@field x integer
 ---@field y integer
 ---@field z integer
 ---@field color? integer
 local Object3D = require("class"):extend("Object3D")
+
+local types = require("SerClass").types
 
 Object3D.schema = {
     {"x", types},

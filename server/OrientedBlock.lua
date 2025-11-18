@@ -1,5 +1,3 @@
-local SerClass = require("SerClass")
-local types = SerClass.types
 local Object3D = require("Object3D")
 local Block = require("Block")
 
@@ -8,6 +6,8 @@ local Block = require("Block")
 local OrientedBlock = Block:extend("OrientedBlock")
 OrientedBlock.serializationTag = 1
 Block.subclasses[1] = OrientedBlock
+
+local types = require("SerClass").types
 
 OrientedBlock.schema = {
     super = Block,

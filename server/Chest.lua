@@ -2,8 +2,6 @@ local Block = require("Block")
 local Item = require("Item")
 local ItemFilter = require("ItemFilter")
 local Inventory = require("Inventory")
-local SerClass = require("SerClass")
-local types = SerClass.types
 
 ---@class Chest: OrientedBlock, ItemProvider, Serializable
 ---@field filter Item | ItemFilter | nil
@@ -12,6 +10,8 @@ local types = SerClass.types
 local Chest = require("OrientedBlock"):extend("Chest")
 Chest.serializationTag = 2
 Block.subclasses[2] = Chest
+
+local types = require("SerClass").types
 
 Chest.schema = {
     super = Chest.super,

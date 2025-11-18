@@ -1,8 +1,6 @@
 local Volume = require("Volume")
 local MetaChunk = require("MetaChunk")
 local Turtle = require("Turtle")
-local SerClass = require("SerClass")
-local types = SerClass.types
 
 ---@class Project: Volume, Serializable
 ---@field super Volume
@@ -11,6 +9,8 @@ local types = SerClass.types
 ---@field chunks MetaChunk
 ---@field messages Message[]
 local Project = require("Volume"):extend("Project")
+
+local types = require("SerClass").types
 
 Project.schema = {
     super = Project.super,

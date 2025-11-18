@@ -1,6 +1,3 @@
-local SerClass = require("SerClass")
-local types = SerClass.types
-
 ---@class Block: Object3D
 ---@field displayName string
 ---@field chunk Chunk
@@ -9,6 +6,8 @@ local types = SerClass.types
 ---@field subclasses Block[]
 local Block = require("Object3D"):extend("Block")
 Block.subclasses = {}
+
+local types = require("SerClass").types
 
 Block.schema = {
     super = Block.super,

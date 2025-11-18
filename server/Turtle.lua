@@ -2,8 +2,6 @@ local Volume = require("Volume")
 local Inventory = require("Inventory")
 local Item = require("Item")
 local Block = require("Block")
-local SerClass = require("SerClass")
-local types = SerClass.types
 -- TODO
 
 ---@class Turtle: OrientedBlock, UiComponent, ITurtle
@@ -16,6 +14,8 @@ local types = SerClass.types
 local Turtle = require("OrientedBlock"):extend("Turtle")
 Turtle.serializationTag = 3
 Block.subclasses[3] = Turtle
+
+local types = require("SerClass").types
 
 Turtle.schema = {
     super = Turtle.super,
