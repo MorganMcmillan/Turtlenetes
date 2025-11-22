@@ -11,6 +11,7 @@ local BlocksInstruction = require("class"):extend("BlocksInstruction")
 BlocksInstruction:with(require("SerializeSubclassMixin"))
 BlocksInstruction.subclasses = {}
 BlocksInstruction.instructions = {}
+
 BlocksInstruction.color = colors.yellow
 
 local types = require("SerClass").types
@@ -33,7 +34,17 @@ function BlocksInstruction:init(inputs, branches)
     end
 end
 
-function BlocksInstruction:ui(x, y)
+function BlocksInstruction:getHeight()
+    local height = 1
+    if self.branchCount then
+        for i = 1, self.branchCount do
+            height = height + self.branches[i]:getHeight() + 1 -- extra height for branch separator
+        end
+    end
+    return height
+end
+
+function BlocksInstruction:ui(x, y, width, height)
     --TODO: figure out how to draw blocks, especially ones with multiple branches
 end
 

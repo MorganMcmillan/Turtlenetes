@@ -27,4 +27,15 @@ function BlocksScript:tick(handler, pc)
     end
 end
 
+---Gets the hight of every block, including nested blocks
+---@return integer height
+function BlocksScript:getHeight()
+    local height = 0
+    for i = 1, #self.instructions do
+        local instruction = self.instructions[i]
+        height = height + instruction:getHeight()
+    end
+    return height
+end
+
 return BlocksScript
