@@ -37,4 +37,16 @@ function scrollbar.vertical(x, y, height, current, rangeEnd, barColor, color)
     paintutils.drawLine(x, barPosition, x, min(y2 ,barPosition + barSize - 1), barColor or colors.lightGray)
 end
 
+---Calculates the position of the inner scrollbar draggy
+---@param position integer
+---@param mousePosition integer
+---@param size integer
+---@param rangeEnd integer
+---@return integer draggyPosition
+function scrollbar.onClick(position, mousePosition, size, rangeEnd)
+    local relPos = mousePosition - position
+    local ratio = size / rangeEnd
+    return position + relPos * ratio
+end
+
 return scrollbar

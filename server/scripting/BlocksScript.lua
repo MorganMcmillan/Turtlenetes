@@ -38,4 +38,10 @@ function BlocksScript:getHeight()
     return height
 end
 
+function BlocksScript:ui(x, y, width, height)
+    for i = 1, #self.instructions do
+        self.instructions[i]:ui(x, y, width, height)
+    end
+end
+
 return BlocksScript

@@ -44,8 +44,35 @@ function BlocksInstruction:getHeight()
     return height
 end
 
+local rectangle = require("ui.rectangle")
+local floor = math.floor
+
 function BlocksInstruction:ui(x, y, width, height)
-    --TODO: figure out how to draw blocks, especially ones with multiple branches
+    rectangle.draw(x, y, width, height, self.color)
+    local tx = x + 1
+    local ty = y + floor(height / 2) - 1
+    tx = rectangle.drawText(tx, ty, self.displayName, self.color)
+
+    -- Draw inputs
+    if self.inputCount then
+        for i = 1, self.inputCount do
+            local input = self.inputs[i]
+            tx = input:ui(tx, ty)
+        end
+    end
+
+    -- Draw branches
+    if self.branchCount then
+        for i = 1, self.branchCount do
+            local branch = self.branches[i]
+            y = y + height
+            branch:ui(x, y, width, height)
+
+            -- Draw branch separator
+            y = y + 1
+            rectangle.draw(x, y, width, 1, self.color)
+        end
+    end
 end
 
 ---Runs this block's code

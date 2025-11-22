@@ -39,16 +39,26 @@ local scrollbar = require("ui.scrollbar")
 
 function BlocksEventHandlerView:ui(x, y, width, height)
     -- Draw horizontal scrollbar
-
+    scrollbar.horizontal(x, y, width, self.horizontalScrollbar, self.width)
     y = y + 1
+    height = height - 1
 
-    -- Draw vertical scrollbar
+    -- Draw vertical scrollbar to the right
+    scrollbar.vertical(width, y, height, self.verticalScrollbar, self.height)
+    width = width - 1
 
     -- Draw empty gray box
-    rectangle.draw(x, y, width, height)
+    rectangle.draw(x, y, width, height, colors.lightGray)
 
+    -- Draw event handler scripts
     for i = 1, #self.eventOrder do
         local event = self.eventOrder[i]
+        local script = self.handler.handlers[event]
 
+        -- Cull offscreen scripts
+        local scriptX = x + self.horizontalScrollbar + (BLOCKS_WIDTH * (i - 1))
+        if scriptX <= (x + width) and (scriptX + BLOCKS_WIDTH) > x then
+            script:ui(x, y, BLOCKS_WIDTH, BLOCKS_HEIGHT)
+        end
     end
 end
