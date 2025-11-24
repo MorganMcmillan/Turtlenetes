@@ -22,6 +22,12 @@ function BlocksEventHandler:init(variables)
     self.variables = variables or {}
 end
 
+---Sets the currently active turtle to this turtle
+---@param turtle Turtle
+function BlocksEventHandler:setCurrentTurtle(turtle)
+    self.variables.turtle = turtle
+end
+
 function BlocksEventHandler:addEvent(event, script)
     self.handlers[event] = script
 end
