@@ -11,6 +11,7 @@ local Block = require("Block")
 ---@field inventory Inventory
 ---@field left Item
 ---@field right Item
+---@field actionProvider ActionProvider
 local Turtle = require("OrientedBlock"):extend("Turtle")
 Turtle.serializationTag = 3
 Block.subclasses[3] = Turtle
@@ -26,11 +27,17 @@ Turtle.schema = {
     {"right", Item}
 }
 
-function Turtle:init(x, y, z, direction, volume, address)
+function Turtle:init(x, y, z, direction, volume, address, actionProvider)
     self.super.init(self, x, y, z, direction)
     self.volume = volume
     self.address = address
+    self.actionProvider = actionProvider
     self:refresh()
+    actionProvider:initAction(self)
+end
+
+function Turtle:tick()
+    self.actionProvider:act(self)
 end
 
 function Turtle:sendCommand(method, ...)

@@ -38,6 +38,13 @@ function Project:init(volume, name)
     self.camera = Camera:new(0, 0, 0)
 end
 
+---Ticks time forward for the project
+function Project:tick()
+    for _, turtle in ipairs(self.turtles) do
+        turtle:tick()
+    end
+end
+
 -- Impl UiComponent
 
 function Project:ui()
@@ -64,15 +71,56 @@ function Project:leftSideBar(height)
     end
 end
 
+local sub = string.sub
+
 -- Renders a representation of the world chunks
 function Project:renderView(x, width, height)
     -- TODO use 2D rendering given a specific Y coordinate of the camera
+    for bz = 1, height do
+        for bx = 1, width do
+            local block = self.chunks:getBlock(self.camera.x + bx, self.camera.y, self.camera.z + bz)
+            term.setCursorPos(x + bx - 1, bz)
+            term.setBackgroundColor(block and block.color or colors.black)
+            term.setTextColor(colors.white)
+            term.write(block and sub(block.name, 1, 1):upper() or "")
+        end
+    end
 end
 
 function Project:rightSideBar(x, width, height)
     -- TODO render sidebar tabs based on context
     -- For now we will render just the event view
     self.handlerView:ui(x, 1, width, height)
+end
+
+-- Impl Clickable
+
+local floor = math.floor
+
+function Project:onClick(button, x, y)
+    local width, height = term.getSize()
+    if x >= 6 then
+        local toolIndex = floor((y - 1) / 5) + 1
+        self.tools[toolIndex]:onClick(button, x, y)
+    else
+        width = width - 5
+        local viewWidth = math.floor(width * 3 / 5)
+        x = x + 6
+        if x <= viewWidth then
+            self:blockClicked(button, x - viewWidth, y)
+        else
+            self:rightSideBarClicked(button, x - (width - viewWidth), y)
+        end
+    end
+end
+
+function Project:blockClicked(button, x, y)
+    
+end
+
+function Project:rightSideBarClicked(button, x, y)
+    -- TODO render based on sidebar tab
+    self.handlerView:onClick(button, x, y)
 end
 
 return Project

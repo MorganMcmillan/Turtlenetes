@@ -6,6 +6,10 @@ local Chunk = require("Chunk")
 
 ---@class MetaChunk: class, Serializable
 ---@field root RedBlackTree
+---@field cachedChunkX? integer
+---@field cachedChunkY? integer
+---@field cachedChunkZ? integer
+---@field cachedChunk? Chunk
 local MetaChunk = require("class"):extend("MetaChunk")
 
 MetaChunk.schema = {
@@ -18,9 +22,16 @@ function MetaChunk:init()
 end
 
 ---Gets a chunk using relative (global) coordinates
+---caches recently accessed chunks as to not incur a lookup
 ---@return Chunk
 function MetaChunk:getChunk(x, y, z)
-    return search(self.root, x / 16, y / 16, z / 16)
+    if self.cachedChunkX ~= x or self.cachedChunkY ~= y or self.cachedChunkZ ~= z then
+        self.cachedChunkX = x
+        self.cachedChunkY = y
+        self.cachedChunkZ = z
+        self.cachedChunk = search(self.root, x / 16, y / 16, z / 16)
+    end
+    return self.cachedChunk
 end
 
 local function addNeighbors(tree, chunk, x, y, z)
@@ -69,7 +80,7 @@ function MetaChunk:addChunk(x, y, z)
     local chunk = Chunk:new(x, y, z)
     x, y, z = x / 16, y / 16, z / 16
     insert(self, x, y, z, chunk)
-    
+
     -- Add neighbors
     addNeighbors(self, chunk, x, y, z)
 
@@ -85,7 +96,7 @@ MetaChunk.onDeserialize = fixChunkNeighbors
 ---Gets a block using relative (global) coordinates
 ---@return Block | false
 function MetaChunk:getBlock(x, y, z)
-    return self:getChunk(x, y, z):getBlockRelative(x, y, z)
+    return self:getChunk(x, y, y):getBlockRelative(x, y, z)
 end
 
 function MetaChunk:setBlock(x, y, z, block)
