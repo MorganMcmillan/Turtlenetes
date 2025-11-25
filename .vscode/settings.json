@@ -11,6 +11,7 @@
         "write"
     ],
     "Lua.diagnostics.disable": [
-        "deprecated"
+        "deprecated",
+        "undefined-field",
     ]
 }
