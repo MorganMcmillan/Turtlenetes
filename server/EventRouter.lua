@@ -58,43 +58,85 @@ local function parseRoute(route)
         method(...)
     end
 
-    local function parseTokens(i)
+    local parseTokens
+
+    local function foo(i)
+        local nextToken = tokens[i + 1]
+        if nextToken then
+            local tType = nextToken.type
+            local nextFn = parseTokens(i + 2)
+            if tType == TOKEN.DOT then
+                return nextFn
+            elseif tType == TOKEN.DEEP_SEARCH then
+                -- A set to prevent cycles
+                local seen = {}
+                -- Deeply searches the object for the matching field
+                local function deepSearch(method, object, ...)
+                    if type(object) ~= "table" then return false end
+                    for _, v in pairs(object) do
+                        if not seen[v] then
+                            seen[v] = true
+                            if nextFn(method, v, ...) or deepSearch(method, v, ...) then
+                                return true
+                            end
+                        end
+                    end
+                end
+                return deepSearch
+            end
+        else
+            return terminalOp
+        end
+    end
+
+    parseTokens = function(i)
         local token = tokens[i]
         if token == nil then
             return terminalOp
         end
         local tType, tData = token.type, token.data
+        local nextFn
 
         if tType == TOKEN.FIELD then
-            i = i + 1
-            local nextToken = tokens[i]
-            local nextFn
-            if nextToken and nextToken.type == TOKEN.DOT then
-                nextFn = parseTokens(i + 1)
-            else
-                nextFn = terminalOp
-            end
-            return function (method, object, ...)
-                object = object[tData]
-                if not object then return end
-                nextFn(method, object, ...)
-            end
-        elseif tType == TOKEN.CLASS_NAME then
-            i = i + 1
-            local nextToken = tokens[i]
-            local nextFn
-            if nextToken and nextToken.type == TOKEN.DOT then
-                nextFn = parseTokens(i + 1)
-            else
-                nextFn = terminalOp
-            end
+            nextFn = foo(i)
             
             return function (method, object, ...)
-                for k, v in pairs(object) do
+                object = object[tData]
+                if not object then return false end
+                return nextFn(method, object, ...)
+            end
+        elseif tType == TOKEN.CLASS_NAME then
+            nextFn = foo(i)
+            
+            return function (method, object, ...)
+                for _, v in pairs(object) do
                     if type(v) == "table" and v.class.name == tData then
-                        nextFn(method, v, ...)
+                        return nextFn(method, v, ...)
                     end
                 end
+                return false
+            end
+        elseif tType == TOKEN.ARRAY_FOREACH then
+            nextFn = foo(i)
+
+            return function (method, object, ...)
+                if type(object) ~= "table" then return false end
+                for i = 1, #object do
+                    nextFn(method, object[i], ...)
+                end
+                return true
+            end
+        elseif tType == TOKEN.KEYS_FOREACH then
+            nextFn = foo(i)
+
+            return function (method, object, ...)
+                if type(object) ~= "table" then return false end
+                for str, value in pairs(object) do
+                    if type(str) == "string" then
+                        nextFn(method, value, ...)
+                    end
+                end
+                return true
             end
         end
     end
